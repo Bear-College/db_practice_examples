@@ -1,11 +1,11 @@
 # Variables — `car_service_db`
 
-Examples show **MySQL session user variables** (`@name`), **assignment** from `SET` / `SELECT`, use in **`WHERE`** / **`LIMIT`**, **`PREPARE` / `EXECUTE`**, and a few **server/session system variables** (`@@…`). The script targets **`car_service_db`** (from **`database/car_service_db.sql.gz`**).
+Examples show **MySQL session user variables** (`@name`), **assignment** from `SET` / `SELECT`, use in **`WHERE`** / **`LIMIT`**, **`PREPARE` / `EXECUTE`**, and a few **server/session system variables** (`@@…`). The script targets **`car_service_db`** (from **`database_mysql/car_service_db.sql.gz`**).
 
 **Script:** `11_variables/car_service_variables_examples.sql`
 
 ```bash
-gunzip -c database/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
+gunzip -c database_mysql/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
 mysql -u ... -p ... car_service_db < 11_variables/car_service_variables_examples.sql
 ```
 

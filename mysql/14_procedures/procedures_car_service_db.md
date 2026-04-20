@@ -1,11 +1,11 @@
 # Stored procedures — `car_service_db`
 
-Examples define **MySQL stored procedures** with **`IN`**, **`OUT`**, and **`INOUT`** parameters, **`DECLARE`** local variables, and **`CALL`**. They live in **`car_service_db`** (from **`database/car_service_db.sql.gz`**).
+Examples define **MySQL stored procedures** with **`IN`**, **`OUT`**, and **`INOUT`** parameters, **`DECLARE`** local variables, and **`CALL`**. They live in **`car_service_db`** (from **`database_mysql/car_service_db.sql.gz`**).
 
 **Script:** `14_procedures/car_service_procedures_examples.sql`
 
 ```bash
-gunzip -c database/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
+gunzip -c database_mysql/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
 mysql -u ... -p ... car_service_db < 14_procedures/car_service_procedures_examples.sql
 ```
 

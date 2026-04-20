@@ -1,11 +1,11 @@
 # Window functions — `car_service_db`
 
-Examples use **`car_service_db`** from **`database/car_service_db.sql.gz`**. The script is **`10_windows_functions/car_service_windows_functions_examples.sql`**.
+Examples use **`car_service_db`** from **`database_mysql/car_service_db.sql.gz`**. The script is **`10_windows_functions/car_service_windows_functions_examples.sql`**.
 
 **Requirement:** MySQL **8.0+** (window functions are not available in MySQL 5.7).
 
 ```bash
-gunzip -c database/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
+gunzip -c database_mysql/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
 mysql -u ... -p ... car_service_db < 10_windows_functions/car_service_windows_functions_examples.sql
 ```
 

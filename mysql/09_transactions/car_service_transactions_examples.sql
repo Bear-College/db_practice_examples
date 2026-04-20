@@ -20,7 +20,9 @@ INSERT INTO tx_lab (name, balance) VALUES
 -- -----------------------------------------------------------------------------
 -- Autocommit (default ON: each standalone statement auto-commits when it ends)
 -- -----------------------------------------------------------------------------
-SELECT @@session.autocommit AS autocommit_default;
+SELECT "autocommit" AS metric, @@session.autocommit AS value
+UNION ALL
+SELECT "tx_lab_rows" AS metric, COUNT(*) AS value FROM tx_lab;
 
 -- -----------------------------------------------------------------------------
 -- 1) Add an explicit transaction, then REMOVE it with ROLLBACK (discard changes)

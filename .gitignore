@@ -1,5 +1,5 @@
-database/car_service_db.sql
-database/car_service_db.sql
+database_mysql/car_service_db.sql
+database_mysql/car_service_db.sql
 .DS_Store
 
 # SQLAlchemy ORM lab SQLite files (under mysql/)
@@ -7,3 +7,9 @@ mysql/16_orm/**/*.db
 
 __pycache__/
 *.py[cod]
+
+# MongoDB practice dump archives (generate locally)
+mongodb/practice_db/dumps/*.archive
+mongodb/practice_db/dumps/*.gz
+database_mongo/dumps/*.archive
+database_mongo/dumps/*.gz

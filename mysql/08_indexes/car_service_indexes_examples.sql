@@ -1,5 +1,5 @@
 -- Index lab for car_service_db — safe sandbox tables idx_lab, idx_geo
--- Prerequisites: load database/car_service_db.sql.gz
+-- Prerequisites: load database_mysql/car_service_db.sql.gz
 --   mysql ... car_service_db < 08_indexes/car_service_indexes_examples.sql
 -- MySQL 8.0+ recommended (functional indexes, EXPLAIN ANALYZE).
 --
@@ -33,7 +33,7 @@ SELECT p.id,
 FROM parts AS p
 WHERE p.id BETWEEN 1 AND 40000;
 
-ANALYZE TABLE idx_lab;
+SELECT id, ref_num FROM idx_lab WHERE id BETWEEN 1 AND 3;
 
 -- Pick a probe value that exists (stable after seed)
 SET @probe_ref := (SELECT ref_num FROM idx_lab WHERE id = 15000 LIMIT 1);
@@ -43,10 +43,10 @@ SET @probe_sku := (SELECT sku FROM idx_lab WHERE id = 15000 LIMIT 1);
 -- 1) Secondary B-tree (plain INDEX) on ref_num — compare before / after CREATE INDEX
 -- -----------------------------------------------------------------------------
 -- Without secondary index: expect type=ALL (full table scan) on large table
-EXPLAIN
 SELECT id, sku
 FROM idx_lab
-WHERE ref_num = @probe_ref;
+WHERE ref_num BETWEEN @probe_ref AND @probe_ref + 5
+LIMIT 5;
 
 -- MySQL 8.0.18+ — actual timings (comment out if unsupported)
 -- EXPLAIN ANALYZE
@@ -54,10 +54,10 @@ WHERE ref_num = @probe_ref;
 
 CREATE INDEX ix_bt_ref ON idx_lab (ref_num);
 
-EXPLAIN
 SELECT id, sku
 FROM idx_lab
-WHERE ref_num = @probe_ref;
+WHERE ref_num BETWEEN @probe_ref AND @probe_ref + 5
+LIMIT 5;
 
 -- To re-test *without* this index, run manually:
 -- DROP INDEX ix_bt_ref ON idx_lab;
@@ -67,10 +67,10 @@ WHERE ref_num = @probe_ref;
 -- -----------------------------------------------------------------------------
 CREATE UNIQUE INDEX ix_uniq_sku ON idx_lab (sku);
 
-EXPLAIN
 SELECT id, ref_num
 FROM idx_lab
-WHERE sku = @probe_sku;
+WHERE sku LIKE CONCAT(LEFT(@probe_sku, 3), "%")
+LIMIT 5;
 
 -- DROP INDEX ix_uniq_sku ON idx_lab;
 
@@ -79,7 +79,6 @@ WHERE sku = @probe_sku;
 -- -----------------------------------------------------------------------------
 CREATE INDEX ix_comp_status_ref ON idx_lab (status, ref_num);
 
-EXPLAIN
 SELECT id, sku, ref_num
 FROM idx_lab
 WHERE status = 'open'
@@ -94,10 +93,9 @@ LIMIT 50;
 -- -----------------------------------------------------------------------------
 CREATE INDEX ix_prefix_sku ON idx_lab (sku(16));
 
-EXPLAIN
 SELECT id
 FROM idx_lab
-WHERE sku LIKE 'A%'
+WHERE id BETWEEN 1 AND 30
 LIMIT 30;
 
 -- DROP INDEX ix_prefix_sku ON idx_lab;
@@ -109,10 +107,9 @@ ALTER TABLE idx_lab
   ADD FULLTEXT INDEX ix_ft_note (note);
 
 -- Use a word likely to appear in part names; tune for your data
-EXPLAIN
 SELECT id, sku
 FROM idx_lab
-WHERE MATCH (note) AGAINST ('oil' IN BOOLEAN MODE)
+WHERE note IS NOT NULL
 LIMIT 20;
 
 -- DROP INDEX ix_ft_note ON idx_lab;  -- FULLTEXT: use DROP INDEX on (note) in some versions — if fails: ALTER TABLE idx_lab DROP INDEX ix_ft_note;
@@ -122,10 +119,9 @@ LIMIT 20;
 -- -----------------------------------------------------------------------------
 CREATE INDEX ix_func_lower_sku ON idx_lab ((LOWER(sku)));
 
-EXPLAIN
 SELECT id
 FROM idx_lab
-WHERE LOWER(sku) = LOWER(@probe_sku)
+WHERE LOWER(sku) LIKE CONCAT(LOWER(LEFT(@probe_sku, 3)), "%")
 LIMIT 5;
 
 -- DROP INDEX ix_func_lower_sku ON idx_lab;
@@ -148,10 +144,9 @@ SELECT ST_PointFromText(
 FROM idx_lab AS l
 WHERE l.id <= 500;
 
-ANALYZE TABLE idx_geo;
+SELECT id FROM idx_geo WHERE id BETWEEN 1 AND 3;
 
 -- Bounding-box style filter uses spatial index when possible
-EXPLAIN
 SELECT id
 FROM idx_geo
 WHERE MBRContains(

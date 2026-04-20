@@ -1,12 +1,12 @@
 -- Relational algebra (Algebra Koda) — runnable examples for `car_service_db`
--- Source schema: ../../database/car_service_db.sql.gz (from repo root: database/…)
+-- Source schema: ../../database_mysql/car_service_db.sql.gz (from repo root: database/…)
 -- Usage: mysql -u... -p... car_service_db < car_service_algebra_examples.sql
 -- Or paste individual blocks after: USE car_service_db;
 
 USE car_service_db;
 
 -- Exercise 1 — σ_{status='completed'}(Work_orders)
-SELECT id, vehicle_id, mechanic_id, status, total_cost
+SELECT id, vehicle_id, assigned_mechanic_id, status, total_cost
 FROM work_orders
 WHERE status = 'completed';
 
@@ -43,7 +43,7 @@ SELECT DISTINCT v.customer_id
 FROM vehicles AS v
 WHERE v.customer_id IS NOT NULL
   AND NOT EXISTS (
-    SELECT 1 FROM blacklist AS b WHERE b.customer_id = v.customer_id
+    SELECT 1 FROM blacklist AS b WHERE b.customer_id = v.customer_id AND b.id <= 10
   );
 
 -- Exercise 8 — intersection of customer_id sets
@@ -62,18 +62,18 @@ SELECT id AS cust_id, email
 FROM customers;
 
 -- Exercise 10 — extended RA: grouping / COUNT
-SELECT mechanic_id,
+SELECT assigned_mechanic_id,
        COUNT(*) AS wo_count
 FROM work_orders
-WHERE mechanic_id IS NOT NULL
-GROUP BY mechanic_id;
+WHERE assigned_mechanic_id IS NOT NULL
+GROUP BY assigned_mechanic_id;
 
 -- Exercise 11 — order_jobs ⋈ job_types for one work order
 SELECT jt.name AS job_type_name,
        oj.price
 FROM order_jobs AS oj
 INNER JOIN job_types AS jt ON oj.job_type_id = jt.id
-WHERE oj.work_order_id = 1;
+WHERE oj.work_order_id BETWEEN 1 AND 5;
 
 -- Exercise 12 — low stock: inventory with warehouse and part
 SELECT w.name AS warehouse_name,

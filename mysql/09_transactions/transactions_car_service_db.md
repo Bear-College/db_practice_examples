@@ -1,11 +1,11 @@
 # Transactions — `car_service_db`
 
-Examples use a small lab table **`tx_lab`** inside **`car_service_db`** (loaded from **`database/car_service_db.sql.gz`**). The script creates the table, runs **`START TRANSACTION`** / **`COMMIT`** / **`ROLLBACK`** / **`SAVEPOINT`**, then optionally drops the table.
+Examples use a small lab table **`tx_lab`** inside **`car_service_db`** (loaded from **`database_mysql/car_service_db.sql.gz`**). The script creates the table, runs **`START TRANSACTION`** / **`COMMIT`** / **`ROLLBACK`** / **`SAVEPOINT`**, then optionally drops the table.
 
 **Script:** `09_transactions/car_service_transactions_examples.sql`
 
 ```bash
-gunzip -c database/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
+gunzip -c database_mysql/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
 mysql -u ... -p ... car_service_db < 09_transactions/car_service_transactions_examples.sql
 ```
 

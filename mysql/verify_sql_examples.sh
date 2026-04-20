@@ -3,8 +3,8 @@
 # Prerequisites:
 #   - mysql client on PATH
 #   - Server running (socket or TCP per your ~/.my.cnf)
-#   - For algebra + DQL: load database/car_service_db.sql.gz into `car_service_db` first, e.g.:
-#       gunzip -c database/car_service_db.sql.gz | mysql -u... -p... car_service_db
+#   - For algebra + DQL: load database_mysql/car_service_db.sql.gz into `car_service_db` first, e.g.:
+#       gunzip -c database_mysql/car_service_db.sql.gz | mysql -u... -p... car_service_db
 #
 # Usage (from repo root):
 #   chmod +x verify_sql_examples.sh
@@ -40,7 +40,7 @@ run_file "DML (dml_practice)" "$ROOT/03_dml/car_service_dml_examples.sql"
 if ! "${MYSQL[@]}" -Nse "SHOW DATABASES LIKE 'car_service_db'" | grep -q .; then
   echo ""
   echo "SKIP: database \`car_service_db\` not found."
-  echo "Load: gunzip -c database/car_service_db.sql.gz | mysql -u $MYSQL_USER ... car_service_db"
+  echo "Load: gunzip -c database_mysql/car_service_db.sql.gz | mysql -u $MYSQL_USER ... car_service_db"
   echo "Then re-run this script for algebra + DQL checks."
   exit 0
 fi

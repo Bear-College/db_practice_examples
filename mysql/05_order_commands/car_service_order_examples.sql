@@ -1,6 +1,6 @@
 -- Порядок команд у SQL-запитах (як у навчальному матеріалі):
 --   SELECT → FROM → JOIN → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT → (LIMIT OFFSET)
--- База: завантажити database/car_service_db.sql.gz у car_service_db
+-- База: завантажити database_mysql/car_service_db.sql.gz у car_service_db
 -- Запуск з кореня репозиторію:
 --   mysql -u... -p... car_service_db < 05_order_commands/car_service_order_examples.sql
 
@@ -68,7 +68,7 @@ SELECT wo.id AS work_order_id,
 FROM work_orders AS wo
 INNER JOIN vehicles AS v ON v.id = wo.vehicle_id
 INNER JOIN customers AS c ON c.id = v.customer_id
-LEFT JOIN car_brands AS b ON b.id = v.car_brands_id
+LEFT JOIN car_brands AS b ON b.id = v.brand_id
 WHERE wo.id BETWEEN 1 AND 400
 ORDER BY wo.total_cost DESC
 LIMIT 15;

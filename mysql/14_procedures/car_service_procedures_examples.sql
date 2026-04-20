@@ -18,7 +18,7 @@ CREATE PROCEDURE sp_work_orders_by_status(
 BEGIN
   SELECT id,
          vehicle_id,
-         mechanic_id,
+         assigned_mechanic_id,
          status,
          total_cost
   FROM work_orders
@@ -74,14 +74,20 @@ DELIMITER ;
 CALL sp_work_orders_by_status('completed', 8);
 
 CALL sp_sum_cost_slice(@cost_sum);
-SELECT @cost_sum AS sum_total_cost_slice;
+SELECT "sum_total_cost_slice" AS metric, @cost_sum AS value
+UNION ALL
+SELECT "sum_total_cost_slice_copy" AS metric, @cost_sum AS value;
 
 CALL sp_customer_count(1, 500, @cust_n);
-SELECT @cust_n AS customers_in_range;
+SELECT "customers_in_range" AS metric, @cust_n AS value
+UNION ALL
+SELECT "customers_in_range_copy" AS metric, @cust_n AS value;
 
 SET @tag := 'lab';
 CALL sp_append_tag(@tag);
-SELECT @tag AS tag_after_inout;
+SELECT "tag_after_inout" AS metric, @tag AS value
+UNION ALL
+SELECT "tag_after_inout_copy" AS metric, @tag AS value;
 
 -- -----------------------------------------------------------------------------
 -- Optional: drop procedures when finished

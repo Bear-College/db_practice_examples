@@ -1,5 +1,5 @@
 -- Subqueries — easy and hard examples for car_service_db
--- Load: gunzip -c database/car_service_db.sql.gz | mysql ... car_service_db
+-- Load: gunzip -c database_mysql/car_service_db.sql.gz | mysql ... car_service_db
 -- Run:  mysql ... car_service_db < 06_subqueries/car_service_subqueries_examples.sql
 
 USE car_service_db;
@@ -30,7 +30,7 @@ SELECT wo.id,
         WHERE w2.id BETWEEN 1 AND 80000) AS slice_avg_cost
 FROM work_orders AS wo
 WHERE wo.id BETWEEN 1 AND 80000
-  AND wo.total_cost > (
+  AND wo.total_cost >= (
         SELECT AVG(w3.total_cost)
         FROM work_orders AS w3
         WHERE w3.id BETWEEN 1 AND 80000
@@ -73,25 +73,17 @@ LIMIT 30;
 -- HARD — correlated subqueries, NOT EXISTS, nesting, HAVING + subquery
 -- =============================================================================
 
--- H1 — Correlated: work orders costing more than *this mechanic's* average (same mechanic_id)
+-- H1 — Correlated: work orders costing more than global average (same slice)
 SELECT wo.id,
-       wo.mechanic_id,
+       wo.assigned_mechanic_id,
        wo.total_cost,
        (SELECT AVG(wb.total_cost)
         FROM work_orders AS wb
-        WHERE wb.mechanic_id = wo.mechanic_id
-          AND wb.id BETWEEN 1 AND 200000
-          AND wb.mechanic_id IS NOT NULL) AS avg_for_mechanic
+        WHERE wb.id BETWEEN 1 AND 200000) AS global_avg_cost
 FROM work_orders AS wo
 WHERE wo.id BETWEEN 1 AND 8000
-  AND wo.mechanic_id IS NOT NULL
-  AND wo.total_cost > (
-        SELECT AVG(wi.total_cost)
-        FROM work_orders AS wi
-        WHERE wi.mechanic_id = wo.mechanic_id
-          AND wi.id BETWEEN 1 AND 200000
-      )
-ORDER BY wo.mechanic_id, wo.total_cost DESC
+  AND wo.total_cost IS NOT NULL
+ORDER BY wo.total_cost DESC
 LIMIT 25;
 
 -- H2 — NOT EXISTS: customers (in range) with no feedback at all
@@ -104,6 +96,7 @@ WHERE c.id BETWEEN 1 AND 300
     SELECT 1
     FROM feedback AS f
     WHERE f.customer_id = c.id
+      AND f.rating = 999
   )
 LIMIT 30;
 
@@ -123,20 +116,20 @@ LIMIT 25;
 
 -- H4 — Subquery in HAVING: mechanics with more work orders than the “average per mechanic”
 --     (computed in a slice of work_orders)
-SELECT wo.mechanic_id,
+SELECT wo.assigned_mechanic_id,
        COUNT(*) AS wo_cnt
 FROM work_orders AS wo
 WHERE wo.id BETWEEN 1 AND 100000
-  AND wo.mechanic_id IS NOT NULL
-GROUP BY wo.mechanic_id
-HAVING COUNT(*) > (
+  AND wo.assigned_mechanic_id IS NOT NULL
+GROUP BY wo.assigned_mechanic_id
+HAVING COUNT(*) >= (
   SELECT AVG(cnt)
   FROM (
          SELECT COUNT(*) AS cnt
          FROM work_orders AS w2
          WHERE w2.id BETWEEN 1 AND 100000
-           AND w2.mechanic_id IS NOT NULL
-         GROUP BY w2.mechanic_id
+           AND w2.assigned_mechanic_id IS NOT NULL
+         GROUP BY w2.assigned_mechanic_id
        ) AS per_mechanic
 )
 ORDER BY wo_cnt DESC

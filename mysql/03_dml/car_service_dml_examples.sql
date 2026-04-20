@@ -1,5 +1,5 @@
 -- DML — car_service_db theme, sandbox database `dml_practice`
--- Source domain: ../../database/car_service_db.sql.gz (from repo root: database/…)
+-- Source domain: ../../database_mysql/car_service_db.sql.gz (from repo root: database/…)
 -- Usage: mysql -u... -p... < car_service_dml_examples.sql
 -- MySQL 8 / 9 OK. Re-run safe: drops and recreates demo objects.
 

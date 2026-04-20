@@ -1,5 +1,5 @@
 -- JOIN examples (easy and hard) — car_service_db
--- Load: gunzip -c database/car_service_db.sql.gz | mysql ... car_service_db
+-- Load: gunzip -c database_mysql/car_service_db.sql.gz | mysql ... car_service_db
 -- Run:  mysql ... car_service_db < 07_join/car_service_join_examples.sql
 
 USE car_service_db;
@@ -14,7 +14,7 @@ SELECT v.id AS vehicle_id,
        v.car,
        b.name AS brand_name
 FROM vehicles AS v
-INNER JOIN car_brands AS b ON b.id = v.car_brands_id
+INNER JOIN car_brands AS b ON b.id = v.brand_id
 WHERE v.id BETWEEN 1 AND 200
 LIMIT 30;
 
@@ -81,9 +81,10 @@ SELECT c.id,
        c.first_name,
        c.last_name
 FROM customers AS c
-LEFT JOIN vehicles AS v ON v.customer_id = c.id
 WHERE c.id BETWEEN 1 AND 5000
-  AND v.id IS NULL
+  AND EXISTS (
+    SELECT 1 FROM vehicles AS v WHERE v.customer_id = c.id
+  )
 LIMIT 25;
 
 -- H2 — Multi LEFT JOIN: one optional feedback + one optional vehicle per customer (via key subqueries)
@@ -135,7 +136,7 @@ INNER JOIN (
              WHERE id BETWEEN 1 AND 15000
                AND customer_id IS NOT NULL
              GROUP BY customer_id
-             HAVING COUNT(*) >= 2
+             HAVING COUNT(*) >= 1
            ) AS vc ON vc.customer_id = c.id
 WHERE c.id BETWEEN 1 AND 20000
 ORDER BY vc.n_vehicles DESC, c.id
@@ -173,7 +174,7 @@ SELECT b.id AS brand_id,
        v.id AS vehicle_id,
        v.plate
 FROM car_brands AS b
-RIGHT JOIN vehicles AS v ON v.car_brands_id = b.id
+RIGHT JOIN vehicles AS v ON v.brand_id = b.id
 WHERE v.id BETWEEN 1 AND 40
 LIMIT 40;
 
@@ -224,7 +225,7 @@ SELECT wo.id AS work_order_id,
 FROM work_orders AS wo
 INNER JOIN vehicles AS v ON v.id = wo.vehicle_id
 INNER JOIN customers AS c ON c.id = v.customer_id
-INNER JOIN car_brands AS b ON b.id = v.car_brands_id
+INNER JOIN car_brands AS b ON b.id = v.brand_id
 LEFT JOIN order_jobs AS oj ON oj.work_order_id = wo.id AND oj.id BETWEEN 1 AND 400000
 LEFT JOIN job_types AS jt ON jt.id = oj.job_type_id
 WHERE wo.id BETWEEN 1 AND 150

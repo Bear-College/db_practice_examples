@@ -41,7 +41,7 @@ Each SQL module usually pairs:
 - `car_service_*_examples.sql` — run with the **mysql** client  
 - `*_car_service_db.md` — notes and commands
 
-Place the **`car_service_db`** dump under **`database/`** (see `.gitignore`) and load it before topics that need schema and data.
+Place the **`car_service_db`** dump under **`database_mysql/`** (see `.gitignore`) and load it before topics that need schema and data.
 
 ### Prerequisites (MySQL)
 
@@ -51,7 +51,13 @@ Place the **`car_service_db`** dump under **`database/`** (see `.gitignore`) and
 ### Load `car_service_db`
 
 ```bash
-gunzip -c database/car_service_db.sql.gz | mysql -u YOUR_USER -p car_service_db
+gunzip -c database_mysql/car_service_db.sql.gz | mysql -u YOUR_USER -p car_service_db
+```
+
+Or import the plain SQL dump directly:
+
+```bash
+mysql -h 127.0.0.1 -P 3306 -u root -p car_service_db < database_mysql/car_service_db.sql
 ```
 
 ### Run all MySQL `.sql` examples
@@ -98,13 +104,16 @@ chmod +x mongodb/verify_mongodb_examples.sh
 ./mongodb/verify_mongodb_examples.sh
 ```
 
+**Large Mongo practice DB** — [`database_mongo/README.md`](database_mongo/README.md): **100 linked collections**, **200k** documents in fact tables, CSV + `mongoimport` + optional `seed_mongo.py` (all under **`database_mongo/`**).
+
 ---
 
 ## Repository layout (top level)
 
 ```
 database/                 # optional MySQL dump (see .gitignore)
+database_mongo/           # MongoDB CSV export (car_workshop_mongo) + mongoimport script
 mysql/                    # relational SQL + ORM
-mongodb/                  # PyMongo examples
+mongodb/                  # PyMongo examples + practice_db (seed / export / dump scripts)
 verify_sql_examples.sh    # delegates to mysql/verify_sql_examples.sh
 ```

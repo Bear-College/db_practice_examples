@@ -1,11 +1,11 @@
 # Порядок команд у SQL-запитах / SQL clause order — `car_service_db`
 
-У навчальних матеріалах наведено **порядок запису** фраз у запиті. Його варто дотримуватися, щоб синтаксис був коректним. Нижче — той самий порядок, що на слайді, з поясненням ролі кожної фрази та прикладами на базі **`car_service_db`** (дамп `database/car_service_db.sql.gz`).
+У навчальних матеріалах наведено **порядок запису** фраз у запиті. Його варто дотримуватися, щоб синтаксис був коректним. Нижче — той самий порядок, що на слайді, з поясненням ролі кожної фрази та прикладами на базі **`car_service_db`** (дамп `database_mysql/car_service_db.sql.gz`).
 
 **Файл із запитами:** `05_order_commands/car_service_order_examples.sql` (з кореня репозиторію).
 
 ```bash
-gunzip -c database/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
+gunzip -c database_mysql/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
 mysql -u ... -p ... car_service_db < 05_order_commands/car_service_order_examples.sql
 ```
 

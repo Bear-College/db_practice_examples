@@ -1,6 +1,6 @@
 # DML (Data Manipulation Language) — `car_service_db` theme
 
-These examples use the **same domain** as the MySQL dump `database/car_service_db.sql.gz` (`customers`, `work_orders`, points/loyalty style fields). The **runnable script** is `car_service_dml_examples.sql` and uses a sandbox database **`dml_practice`** with `dml_demo_*` tables so you **do not change** data inside `car_service_db`.
+These examples use the **same domain** as the MySQL dump `database_mysql/car_service_db.sql.gz` (`customers`, `work_orders`, points/loyalty style fields). The **runnable script** is `car_service_dml_examples.sql` and uses a sandbox database **`dml_practice`** with `dml_demo_*` tables so you **do not change** data inside `car_service_db`.
 
 Pair each exercise below with the matching block in that `.sql` file.
 

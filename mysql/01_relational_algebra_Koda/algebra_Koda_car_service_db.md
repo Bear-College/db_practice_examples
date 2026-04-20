@@ -1,6 +1,6 @@
 # Relational algebra (Algebra Koda) — `car_service_db`
 
-These exercises use **real table and column names** from the MySQL dump `database/car_service_db.sql.gz` (database name: `car_service_db`). Pair each algebra expression with the matching query in `car_service_algebra_examples.sql`.
+These exercises use **real table and column names** from the MySQL dump `database_mysql/car_service_db.sql.gz` (database name: `car_service_db`). Pair each algebra expression with the matching query in `car_service_algebra_examples.sql`.
 
 ## Notation
 

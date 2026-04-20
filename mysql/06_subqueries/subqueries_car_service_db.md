@@ -1,9 +1,9 @@
 # Subqueries — `car_service_db`
 
-Examples use **`car_service_db`** from **`database/car_service_db.sql.gz`**. The runnable script is **`06_subqueries/car_service_subqueries_examples.sql`**.
+Examples use **`car_service_db`** from **`database_mysql/car_service_db.sql.gz`**. The runnable script is **`06_subqueries/car_service_subqueries_examples.sql`**.
 
 ```bash
-gunzip -c database/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
+gunzip -c database_mysql/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
 mysql -u ... -p ... car_service_db < 06_subqueries/car_service_subqueries_examples.sql
 ```
 

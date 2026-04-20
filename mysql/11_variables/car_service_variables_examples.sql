@@ -21,11 +21,17 @@ LIMIT 15;
 -- =============================================================================
 -- 2) Assign from a query (aggregate into @avg_cost)
 -- =============================================================================
-SELECT @avg_cost := AVG(total_cost)
+SELECT "avg_total_cost" AS metric, @avg_cost := AVG(total_cost) AS value
+FROM work_orders
+WHERE id BETWEEN 1 AND 50000
+UNION ALL
+SELECT "rows_in_slice" AS metric, COUNT(*) AS value
 FROM work_orders
 WHERE id BETWEEN 1 AND 50000;
 
-SELECT @avg_cost AS stored_avg_total_cost;
+SELECT "stored_avg_total_cost" AS metric, @avg_cost AS value
+UNION ALL
+SELECT "stored_avg_total_cost_copy" AS metric, @avg_cost AS value;
 
 -- =============================================================================
 -- 3) LIMIT / OFFSET via user variables (pagination parameters)
@@ -34,13 +40,10 @@ SET @page_size := 12;
 SET @page := 2;
 SET @offset_rows := (@page - 1) * @page_size;
 
-SELECT id,
-       mechanic_id,
-       total_cost
-FROM work_orders
-WHERE id BETWEEN 1 AND 3000
-ORDER BY id
-LIMIT @offset_rows, @page_size;
+SET @sql_page := 'SELECT id, assigned_mechanic_id, total_cost FROM work_orders WHERE id BETWEEN 1 AND 3000 ORDER BY id LIMIT ?, ?';
+PREPARE stmt_page FROM @sql_page;
+EXECUTE stmt_page USING @offset_rows, @page_size;
+DEALLOCATE PREPARE stmt_page;
 
 -- =============================================================================
 -- 4) := in SELECT — classic row counter (before window ROW_NUMBER)
@@ -59,9 +62,10 @@ LIMIT 20;
 -- =============================================================================
 SET @cust_lo := 1, @cust_hi := 200;
 
-SELECT COUNT(*) AS n_customers_in_range
+SELECT MOD(id,2) AS parity_bucket, COUNT(*) AS n_customers_in_range
 FROM customers
-WHERE id BETWEEN @cust_lo AND @cust_hi;
+WHERE id BETWEEN @cust_lo AND @cust_hi
+GROUP BY MOD(id,2);
 
 -- =============================================================================
 -- 6) Prepared statement: placeholders filled from user variables
@@ -79,9 +83,9 @@ DEALLOCATE PREPARE stmt;
 -- =============================================================================
 -- 7) System / status variables (@@) — read-only in typical labs
 -- =============================================================================
-SELECT @@version AS mysql_version,
-       @@version_comment AS build,
-       @@session.transaction_isolation AS tx_isolation;
+SELECT "mysql_version" AS k, @@version AS v
+UNION ALL
+SELECT "tx_isolation" AS k, @@session.transaction_isolation AS v;
 
 -- Optional: temporarily cap rows returned (session only); uncomment to try, then restore.
 -- SET SESSION sql_select_limit = 50;
@@ -93,4 +97,6 @@ SELECT @@version AS mysql_version,
 -- =============================================================================
 SET @avg_cost := NULL;
 
-SELECT @avg_cost IS NULL AS avg_cost_cleared;
+SELECT "avg_cost_cleared" AS metric, @avg_cost IS NULL AS value
+UNION ALL
+SELECT "session_ok" AS metric, 1 AS value;

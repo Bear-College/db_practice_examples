@@ -1,12 +1,12 @@
 # DQL (Data Query Language) — `car_service_db`
 
-These examples follow the **core `SELECT` themes** (basic clauses, `NULL`, rich `WHERE`, aggregates, `GROUP BY`, `HAVING`, `ORDER BY`, `DISTINCT`, `LIMIT` / `OFFSET`). They run on the real database loaded from **`database/car_service_db.sql.gz`** (database name: **`car_service_db`**).
+These examples follow the **core `SELECT` themes** (basic clauses, `NULL`, rich `WHERE`, aggregates, `GROUP BY`, `HAVING`, `ORDER BY`, `DISTINCT`, `LIMIT` / `OFFSET`). They run on the real database loaded from **`database_mysql/car_service_db.sql.gz`** (database name: **`car_service_db`**).
 
 Runnable queries: **`04_dql/car_service_dql_examples.sql`** (from the repository root).
 
 ```bash
 mysql -u ... -p ... -e "CREATE DATABASE IF NOT EXISTS car_service_db;"
-gunzip -c database/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
+gunzip -c database_mysql/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
 mysql -u ... -p ... car_service_db < 04_dql/car_service_dql_examples.sql
 ```
 

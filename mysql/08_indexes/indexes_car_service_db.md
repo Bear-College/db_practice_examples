@@ -5,7 +5,7 @@ This module adds a **practice table** `idx_lab` (and a tiny `idx_geo` for **spat
 **Script:** `08_indexes/car_service_indexes_examples.sql`
 
 ```bash
-gunzip -c database/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
+gunzip -c database_mysql/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
 mysql -u ... -p ... car_service_db < 08_indexes/car_service_indexes_examples.sql
 ```
 

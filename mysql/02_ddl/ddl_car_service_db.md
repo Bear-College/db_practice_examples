@@ -1,6 +1,6 @@
 # DDL (Data Definition Language) — `car_service_db` theme
 
-These examples use the **same domain** as the MySQL dump `database/car_service_db.sql.gz` (workshops, suppliers, parts, work orders). The **runnable script** lives in `car_service_ddl_examples.sql` and builds a small sandbox database **`ddl_practice`** so you do not modify or collide with tables inside `car_service_db`.
+These examples use the **same domain** as the MySQL dump `database_mysql/car_service_db.sql.gz` (workshops, suppliers, parts, work orders). The **runnable script** lives in `car_service_ddl_examples.sql` and builds a small sandbox database **`ddl_practice`** so you do not modify or collide with tables inside `car_service_db`.
 
 Pair each exercise below with the matching block in that `.sql` file.
 

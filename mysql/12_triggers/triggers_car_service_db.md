@@ -7,7 +7,7 @@ Examples install **InnoDB triggers** on small lab tables **`tri_lab_account`** a
 **Script:** `12_triggers/car_service_triggers_examples.sql`
 
 ```bash
-gunzip -c database/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
+gunzip -c database_mysql/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
 mysql -u ... -p ... car_service_db < 12_triggers/car_service_triggers_examples.sql
 ```
 

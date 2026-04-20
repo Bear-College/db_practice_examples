@@ -1,5 +1,5 @@
 -- Window functions — MySQL 8.0+ on car_service_db
--- Load: gunzip -c database/car_service_db.sql.gz | mysql ... car_service_db
+-- Load: gunzip -c database_mysql/car_service_db.sql.gz | mysql ... car_service_db
 -- Run:  mysql ... car_service_db < 10_windows_functions/car_service_windows_functions_examples.sql
 
 USE car_service_db;
@@ -22,19 +22,19 @@ LIMIT 40;
 -- W2 — RANK vs DENSE_RANK (ties get same rank; DENSE_RANK leaves no gaps)
 -- =============================================================================
 SELECT id,
-       mechanic_id,
+       assigned_mechanic_id,
        total_cost,
        RANK() OVER (
-         PARTITION BY mechanic_id
+         PARTITION BY assigned_mechanic_id
          ORDER BY total_cost DESC
        ) AS rnk,
        DENSE_RANK() OVER (
-         PARTITION BY mechanic_id
+         PARTITION BY assigned_mechanic_id
          ORDER BY total_cost DESC
        ) AS dense_rnk
 FROM work_orders
 WHERE id BETWEEN 1 AND 8000
-  AND mechanic_id IS NOT NULL
+  AND assigned_mechanic_id IS NOT NULL
 LIMIT 35;
 
 -- =============================================================================
@@ -68,19 +68,19 @@ LIMIT 25;
 -- W5 — LAG / LEAD: previous & next order cost for same mechanic (by id order)
 -- =============================================================================
 SELECT id,
-       mechanic_id,
+       assigned_mechanic_id,
        total_cost,
        LAG(total_cost, 1) OVER (
-         PARTITION BY mechanic_id
+         PARTITION BY assigned_mechanic_id
          ORDER BY id
        ) AS prev_cost,
        LEAD(total_cost, 1) OVER (
-         PARTITION BY mechanic_id
+         PARTITION BY assigned_mechanic_id
          ORDER BY id
        ) AS next_cost
 FROM work_orders
 WHERE id BETWEEN 1 AND 12000
-  AND mechanic_id IS NOT NULL
+  AND assigned_mechanic_id IS NOT NULL
 LIMIT 35;
 
 -- =============================================================================

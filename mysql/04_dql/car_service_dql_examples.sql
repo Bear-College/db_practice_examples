@@ -1,9 +1,9 @@
 -- DQL — themes: SELECT, FROM, WHERE, NULL, AND/OR/IN/LIKE/IS/NOT,
 --   aggregates (COUNT, SUM, AVG, MIN, MAX), GROUP BY, HAVING,
 --   ORDER BY, DISTINCT, LIMIT, LIMIT … OFFSET …
--- Database: load from database/car_service_db.sql.gz into `car_service_db`
+-- Database: load from database_mysql/car_service_db.sql.gz into `car_service_db`
 -- Usage (from repo root):
---   gunzip -c database/car_service_db.sql.gz | mysql -u... -p... car_service_db
+--   gunzip -c database_mysql/car_service_db.sql.gz | mysql -u... -p... car_service_db
 --   mysql -u... -p... car_service_db < 04_dql/car_service_dql_examples.sql
 -- Large tables: predicates use bounded id ranges where helpful.
 
@@ -30,7 +30,7 @@ SELECT id,
        COALESCE(phone, 'no phone') AS phone_display
 FROM customers
 WHERE id BETWEEN 1 AND 300
-  AND phone IS NULL
+  AND phone IS NOT NULL
 LIMIT 15;
 
 -- 3 — WHERE: simple predicate on one table
@@ -51,8 +51,8 @@ SELECT id,
 FROM customers
 WHERE id BETWEEN 1 AND 2000
   AND (
-        (first_name LIKE 'A%' OR first_name LIKE 'B%')
-    OR last_name LIKE '%son'
+        (first_name LIKE 'Name_1%' OR first_name LIKE 'Name_2%')
+    OR last_name LIKE 'Surname_1%'
   )
 LIMIT 20;
 
@@ -66,22 +66,25 @@ WHERE id BETWEEN 1 AND 10000
 LIMIT 25;
 
 SELECT id,
-       mechanic_id,
+       assigned_mechanic_id,
        status
 FROM work_orders
 WHERE id BETWEEN 1 AND 5000
-  AND mechanic_id IS NOT NULL
+  AND assigned_mechanic_id IS NOT NULL
   AND NOT (status = 'cancelled')
 LIMIT 25;
 
 -- 5 — Aggregate functions: COUNT, SUM, AVG, MIN, MAX (one slice of work_orders)
-SELECT COUNT(*) AS row_count,
+SELECT status,
+       COUNT(*) AS row_count,
        SUM(total_cost) AS sum_cost,
        AVG(total_cost) AS avg_cost,
        MIN(total_cost) AS min_cost,
        MAX(total_cost) AS max_cost
 FROM work_orders
-WHERE id BETWEEN 1 AND 50000;
+WHERE id BETWEEN 1 AND 50000
+GROUP BY status
+ORDER BY status;
 
 -- 6 — GROUP BY (with COUNT; groups = work order status)
 SELECT status,
@@ -148,7 +151,7 @@ SELECT v.id AS vehicle_id,
        v.plate,
        b.name AS brand_name
 FROM vehicles AS v
-INNER JOIN car_brands AS b ON b.id = v.car_brands_id
+INNER JOIN car_brands AS b ON b.id = v.brand_id
 WHERE v.id BETWEEN 1 AND 150
 LIMIT 25;
 

@@ -1,11 +1,11 @@
 # Built-in functions — `car_service_db`
 
-Examples use **`car_service_db`** (from **`database/car_service_db.sql.gz`**) and focus on common **MySQL built-in functions**: strings, numbers, dates, conditionals, and a few utilities. They are **not** stored routines (`CREATE FUNCTION`); those are a separate topic.
+Examples use **`car_service_db`** (from **`database_mysql/car_service_db.sql.gz`**) and focus on common **MySQL built-in functions**: strings, numbers, dates, conditionals, and a few utilities. They are **not** stored routines (`CREATE FUNCTION`); those are a separate topic.
 
 **Script:** `13_functions/car_service_functions_examples.sql`
 
 ```bash
-gunzip -c database/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
+gunzip -c database_mysql/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
 mysql -u ... -p ... car_service_db < 13_functions/car_service_functions_examples.sql
 ```
 

@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"campus_id":{"$numberInt":"1"},"code":{"$numberInt":"1"}},"name":"uq_dormitories_campus_code","unique":true}],"uuid":"89004383a2334089996f9f82c7f1d6c2","collectionName":"dormitories","type":"collection"}

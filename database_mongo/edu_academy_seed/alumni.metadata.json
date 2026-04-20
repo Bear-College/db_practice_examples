@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"student_id":{"$numberInt":"1"}},"name":"uq_alumni_student_id","unique":true},{"v":{"$numberInt":"2"},"key":{"status_code":{"$numberInt":"1"}},"name":"ix_alumni_status_code"}],"uuid":"4708981a076942c7b6b6d5247a59a810","collectionName":"alumni","type":"collection"}

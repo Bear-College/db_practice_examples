@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"code":{"$numberInt":"1"}},"name":"uq_campuses_code","unique":true},{"v":{"$numberInt":"2"},"key":{"city_id":{"$numberInt":"1"}},"name":"ix_campuses_city_id"}],"uuid":"795b0360a02d4f309e3e57ad834149bc","collectionName":"campuses","type":"collection"}

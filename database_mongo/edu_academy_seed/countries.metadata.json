@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"code":{"$numberInt":"1"}},"name":"uq_countries_code","unique":true},{"v":{"$numberInt":"2"},"key":{"status_code":{"$numberInt":"1"}},"name":"ix_countries_status_code"}],"uuid":"eed308d0a34c4ba087c6423b62ed0449","collectionName":"countries","type":"collection"}

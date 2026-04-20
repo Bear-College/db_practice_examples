@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"normalized_name":{"$numberInt":"1"}},"name":"uq_library_authors_normalized_name","unique":true,"partialFilterExpression":{"normalized_name":{"$exists":true}}}],"uuid":"5a195d8d7b95482d9adac7f7d0c7e18a","collectionName":"library_authors","type":"collection"}

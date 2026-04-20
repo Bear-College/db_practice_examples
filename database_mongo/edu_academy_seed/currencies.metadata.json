@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"code":{"$numberInt":"1"}},"name":"uq_currencies_code","unique":true},{"v":{"$numberInt":"2"},"key":{"status_code":{"$numberInt":"1"}},"name":"ix_currencies_status_code"}],"uuid":"173609c577664ee798c8e571572678c6","collectionName":"currencies","type":"collection"}

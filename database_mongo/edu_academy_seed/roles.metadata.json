@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"code":{"$numberInt":"1"}},"name":"uq_roles_code","unique":true},{"v":{"$numberInt":"2"},"key":{"status_code":{"$numberInt":"1"}},"name":"ix_roles_status_code"}],"uuid":"d564d1bcb4f44a58a007192d965d6c08","collectionName":"roles","type":"collection"}

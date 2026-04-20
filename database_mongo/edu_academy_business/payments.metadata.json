@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"student_id":{"$numberInt":"1"},"paid_at":{"$numberInt":"-1"}},"name":"student_id_1_paid_at_-1"}],"uuid":"763bd11bcaad44588163a6a695462d31","collectionName":"payments","type":"collection"}

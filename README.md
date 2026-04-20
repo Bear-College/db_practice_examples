@@ -1,6 +1,6 @@
-# Database practice examples (MySQL)
+# Database practice examples (MySQL + ORM)
 
-Numbered topic folders contain **runnable SQL examples** and short companion **`.md`** notes for a workshop-style **`car_service_db`** curriculum (DDL, DML, queries, joins, indexes, transactions, window functions, variables, functions, triggers, procedures, loops, and more).
+Numbered topic folders contain **runnable SQL examples** and short companion **`.md`** notes for a workshop-style **`car_service_db`** curriculum (DDL, DML, queries, joins, indexes, transactions, window functions, variables, functions, triggers, procedures, loops, and more). Module **`16_orm`** adds **Python + SQLAlchemy ORM** samples (SQLite) in themed subfolders.
 
 ## Layout
 
@@ -21,8 +21,9 @@ Numbered topic folders contain **runnable SQL examples** and short companion **`
 | `13_functions` | [Built-in / SQL functions](13_functions/functions_car_service_db.md) |
 | `14_procedures` | [Stored procedures](14_procedures/procedures_car_service_db.md) |
 | `15_cycles` | [Loops and recursive CTEs](15_cycles/cycles_car_service_db.md) |
+| `16_orm` | [SQLAlchemy ORM topics](16_orm/orm_sqlalchemy.md) |
 
-Folders **01**–**09** are zero-padded so the repository browser sorts them **1 … 15** (plain `1_` … `9_` would sort after `10_`).
+Folders **01**–**09** are zero-padded so the repository browser sorts them **1 … 16** (plain `1_` … `9_` would sort after `10_`).
 
 Each module usually pairs:
 
@@ -65,3 +66,7 @@ The script runs every listed `.sql` file in order. If **`car_service_db`** is no
 ## MySQL version
 
 Several examples target **MySQL 8.0+** (for example window functions, functional indexes, `EXPLAIN ANALYZE`). Use 8.0 or newer when possible.
+
+## Python / SQLAlchemy (`16_orm`)
+
+Install dependencies from `16_orm/requirements.txt`, then run `python example.py` inside each subfolder (see `16_orm/orm_sqlalchemy.md`). Examples use **SQLite**; generated `*.db` files are gitignored.

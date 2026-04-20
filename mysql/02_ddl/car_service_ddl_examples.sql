@@ -1,5 +1,5 @@
 -- DDL — car_service_db theme, sandbox database `ddl_practice`
--- Source domain: ../database/car_service_db.sql.gz (do not require it to be loaded)
+-- Source domain: ../../database/car_service_db.sql.gz (from repo root: database/…)
 -- Usage: mysql -u... -p... < car_service_ddl_examples.sql
 -- MySQL 8.0.16+ recommended (CHECK constraints). MySQL 9.x OK.
 

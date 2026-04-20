@@ -2,8 +2,8 @@ database/car_service_db.sql
 database/car_service_db.sql
 .DS_Store
 
-# SQLAlchemy ORM lab SQLite files (16_orm)
-16_orm/**/*.db
+# SQLAlchemy ORM lab SQLite files (under mysql/)
+mysql/16_orm/**/*.db
 
 __pycache__/
 *.py[cod]

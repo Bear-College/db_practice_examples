@@ -1,5 +1,5 @@
 -- Relational algebra (Algebra Koda) — runnable examples for `car_service_db`
--- Source schema: ../database/car_service_db.sql.gz
+-- Source schema: ../../database/car_service_db.sql.gz (from repo root: database/…)
 -- Usage: mysql -u... -p... car_service_db < car_service_algebra_examples.sql
 -- Or paste individual blocks after: USE car_service_db;
 

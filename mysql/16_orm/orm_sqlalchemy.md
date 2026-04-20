@@ -1,4 +1,4 @@
-# SQLAlchemy ORM — Python examples (`16_orm`)
+# SQLAlchemy ORM — Python examples (`mysql/16_orm`)
 
 Self-contained demos for common relational/ORM topics. Each subfolder has an `example.py` you can run after installing dependencies.
 
@@ -6,7 +6,7 @@ Self-contained demos for common relational/ORM topics. Each subfolder has an `ex
 
 ## Setup
 
-From `16_orm/` (or repo root with adjusted paths):
+From `mysql/16_orm/` (or repo root with `cd mysql/16_orm`):
 
 ```bash
 python -m venv .venv

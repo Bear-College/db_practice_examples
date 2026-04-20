@@ -1,72 +1,110 @@
-# Database practice examples (MySQL + ORM)
+# Database practice examples
 
-Numbered topic folders contain **runnable SQL examples** and short companion **`.md`** notes for a workshop-style **`car_service_db`** curriculum (DDL, DML, queries, joins, indexes, transactions, window functions, variables, functions, triggers, procedures, loops, and more). Module **`16_orm`** adds **Python + SQLAlchemy ORM** samples (SQLite) in themed subfolders.
+Two tracks live at the repository root:
 
-## Layout
+| Track | Folder | Stack |
+|-------|--------|--------|
+| **Relational (MySQL)** | [`mysql/`](mysql/) | `.sql` scripts for **`car_service_db`**, plus [`mysql/16_orm/`](mysql/16_orm/) (Python + SQLAlchemy / SQLite) |
+| **Document (MongoDB)** | [`mongodb/`](mongodb/) | Python + **PyMongo** against a local **`mongod`** |
+
+---
+
+## Relational — `mysql/`
+
+Numbered topic folders under **`mysql/`** contain **runnable SQL** and companion **`.md`** notes (relational algebra, DDL, DML, DQL, joins, indexes, transactions, windows, variables, triggers, functions, procedures, cycles). Module **`mysql/16_orm`** adds **SQLAlchemy ORM** samples in themed subfolders.
+
+### Layout (MySQL)
 
 | Folder | Topic (module notes) |
 |--------|----------------------|
-| `01_relational_algebra_Koda` | [Relational algebra](01_relational_algebra_Koda/algebra_Koda_car_service_db.md) |
-| `02_ddl` | [DDL](02_ddl/ddl_car_service_db.md) |
-| `03_dml` | [DML](03_dml/dml_car_service_db.md) |
-| `04_dql` | [DQL](04_dql/dql_car_service_db.md) |
-| `05_order_commands` | [SQL clause order](05_order_commands/order_commands_car_service_db.md) |
-| `06_subqueries` | [Subqueries](06_subqueries/subqueries_car_service_db.md) |
-| `07_join` | [JOINs](07_join/joins_car_service_db.md) |
-| `08_indexes` | [Indexes](08_indexes/indexes_car_service_db.md) |
-| `09_transactions` | [Transactions](09_transactions/transactions_car_service_db.md) |
-| `10_windows_functions` | [Window functions](10_windows_functions/windows_functions_car_service_db.md) |
-| `11_variables` | [Variables](11_variables/variables_car_service_db.md) |
-| `12_triggers` | [Triggers](12_triggers/triggers_car_service_db.md) |
-| `13_functions` | [Built-in / SQL functions](13_functions/functions_car_service_db.md) |
-| `14_procedures` | [Stored procedures](14_procedures/procedures_car_service_db.md) |
-| `15_cycles` | [Loops and recursive CTEs](15_cycles/cycles_car_service_db.md) |
-| `16_orm` | [SQLAlchemy ORM topics](16_orm/orm_sqlalchemy.md) |
+| `mysql/01_relational_algebra_Koda` | [Relational algebra](mysql/01_relational_algebra_Koda/algebra_Koda_car_service_db.md) |
+| `mysql/02_ddl` | [DDL](mysql/02_ddl/ddl_car_service_db.md) |
+| `mysql/03_dml` | [DML](mysql/03_dml/dml_car_service_db.md) |
+| `mysql/04_dql` | [DQL](mysql/04_dql/dql_car_service_db.md) |
+| `mysql/05_order_commands` | [SQL clause order](mysql/05_order_commands/order_commands_car_service_db.md) |
+| `mysql/06_subqueries` | [Subqueries](mysql/06_subqueries/subqueries_car_service_db.md) |
+| `mysql/07_join` | [JOINs](mysql/07_join/joins_car_service_db.md) |
+| `mysql/08_indexes` | [Indexes](mysql/08_indexes/indexes_car_service_db.md) |
+| `mysql/09_transactions` | [Transactions](mysql/09_transactions/transactions_car_service_db.md) |
+| `mysql/10_windows_functions` | [Window functions](mysql/10_windows_functions/windows_functions_car_service_db.md) |
+| `mysql/11_variables` | [Variables](mysql/11_variables/variables_car_service_db.md) |
+| `mysql/12_triggers` | [Triggers](mysql/12_triggers/triggers_car_service_db.md) |
+| `mysql/13_functions` | [Built-in / SQL functions](mysql/13_functions/functions_car_service_db.md) |
+| `mysql/14_procedures` | [Stored procedures](mysql/14_procedures/procedures_car_service_db.md) |
+| `mysql/15_cycles` | [Loops and recursive CTEs](mysql/15_cycles/cycles_car_service_db.md) |
+| `mysql/16_orm` | [SQLAlchemy ORM topics](mysql/16_orm/orm_sqlalchemy.md) |
 
-Folders **01**–**09** are zero-padded so the repository browser sorts them **1 … 16** (plain `1_` … `9_` would sort after `10_`).
+Folders **`mysql/01`**–**`mysql/09`** are zero-padded so the file browser sorts them **1 … 16**.
 
-Each module usually pairs:
+Each SQL module usually pairs:
 
-- `car_service_*_examples.sql` — examples to run with the **mysql** client  
-- `*_car_service_db.md` — context and how to run (paths may vary by topic)
+- `car_service_*_examples.sql` — run with the **mysql** client  
+- `*_car_service_db.md` — notes and commands
 
-Place your **`car_service_db`** dump under `database/` (see `.gitignore` for expected artifacts) and load it before topics that assume existing schema and data.
+Place the **`car_service_db`** dump under **`database/`** (see `.gitignore`) and load it before topics that need schema and data.
 
-## Prerequisites
+### Prerequisites (MySQL)
 
-- **MySQL** server reachable from your machine  
-- **`mysql` client** on your `PATH` (credentials via `~/.my.cnf` or flags)
+- **MySQL** server  
+- **`mysql` client** on your `PATH`
 
-## Load the sample database
-
-Example (adjust user, host, and path to match your dump):
+### Load `car_service_db`
 
 ```bash
 gunzip -c database/car_service_db.sql.gz | mysql -u YOUR_USER -p car_service_db
 ```
 
-If you only have an uncompressed `.sql` file, pipe or redirect that file instead.
+### Run all MySQL `.sql` examples
 
-## Run all example scripts
-
-From the repository root:
+From the **repository root** (wrapper keeps old paths working):
 
 ```bash
 chmod +x verify_sql_examples.sh
 ./verify_sql_examples.sh
 ```
 
-Optional environment variables:
+Or run the script inside **`mysql/`** directly: `./mysql/verify_sql_examples.sh`
 
-- `MYSQL_USER` — defaults to `root`  
-- `MYSQL_ARGS` — extra arguments for the mysql client (for example `'-h127.0.0.1 -psecret'`)
+Optional: `MYSQL_USER`, `MYSQL_ARGS`.
 
-The script runs every listed `.sql` file in order. If **`car_service_db`** is not present, it stops after the scripts that do not require it and prints instructions to load the database first.
+### MySQL version
 
-## MySQL version
+Many examples assume **MySQL 8.0+**.
 
-Several examples target **MySQL 8.0+** (for example window functions, functional indexes, `EXPLAIN ANALYZE`). Use 8.0 or newer when possible.
+### Python / SQLAlchemy (`mysql/16_orm`)
 
-## Python / SQLAlchemy (`16_orm`)
+```bash
+pip install -r mysql/16_orm/requirements.txt
+python mysql/16_orm/01_data_types/example.py
+```
 
-Install dependencies from `16_orm/requirements.txt`, then run `python example.py` inside each subfolder (see `16_orm/orm_sqlalchemy.md`). Examples use **SQLite**; generated `*.db` files are gitignored.
+SQLite lab files (`*.db`) are gitignored under `mysql/16_orm/`.
+
+---
+
+## Document — `mongodb/`
+
+[Topic index and setup](mongodb/mongodb_topics.md)
+
+```bash
+pip install -r mongodb/requirements.txt
+python mongodb/01_connection_basics/example.py
+```
+
+Run all Mongo examples (needs **`mongod`** on `localhost:27017` or set **`MONGODB_URI`**):
+
+```bash
+chmod +x mongodb/verify_mongodb_examples.sh
+./mongodb/verify_mongodb_examples.sh
+```
+
+---
+
+## Repository layout (top level)
+
+```
+database/                 # optional MySQL dump (see .gitignore)
+mysql/                    # relational SQL + ORM
+mongodb/                  # PyMongo examples
+verify_sql_examples.sh    # delegates to mysql/verify_sql_examples.sh
+```

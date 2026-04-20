@@ -1,6 +1,6 @@
 -- Subqueries — easy and hard examples for car_service_db
 -- Load: gunzip -c database/car_service_db.sql.gz | mysql ... car_service_db
--- Run:  mysql ... car_service_db < 6_subqueries/car_service_subqueries_examples.sql
+-- Run:  mysql ... car_service_db < 06_subqueries/car_service_subqueries_examples.sql
 
 USE car_service_db;
 

@@ -2,11 +2,11 @@
 
 Examples use **`car_service_db`** (from **`database/car_service_db.sql.gz`**) and focus on common **MySQL built-in functions**: strings, numbers, dates, conditionals, and a few utilities. They are **not** stored routines (`CREATE FUNCTION`); those are a separate topic.
 
-**Script:** `12_functions/car_service_functions_examples.sql`
+**Script:** `13_functions/car_service_functions_examples.sql`
 
 ```bash
 gunzip -c database/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
-mysql -u ... -p ... car_service_db < 12_functions/car_service_functions_examples.sql
+mysql -u ... -p ... car_service_db < 13_functions/car_service_functions_examples.sql
 ```
 
 **Performance:** large tables are filtered with **`WHERE id BETWEEN …`** / **`LIMIT`**.

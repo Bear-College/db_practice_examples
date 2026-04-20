@@ -2,7 +2,7 @@
 --   SELECT → FROM → JOIN → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT → (LIMIT OFFSET)
 -- База: завантажити database/car_service_db.sql.gz у car_service_db
 -- Запуск з кореня репозиторію:
---   mysql -u... -p... car_service_db < 5_order_commands/car_service_order_examples.sql
+--   mysql -u... -p... car_service_db < 05_order_commands/car_service_order_examples.sql
 
 USE car_service_db;
 

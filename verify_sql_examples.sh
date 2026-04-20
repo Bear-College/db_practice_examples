@@ -34,8 +34,8 @@ run_file() {
   echo "    OK"
 }
 
-run_file "DDL (ddl_practice)" "$ROOT/2_ddl/car_service_ddl_examples.sql"
-run_file "DML (dml_practice)" "$ROOT/3_dml/car_service_dml_examples.sql"
+run_file "DDL (ddl_practice)" "$ROOT/02_ddl/car_service_ddl_examples.sql"
+run_file "DML (dml_practice)" "$ROOT/03_dml/car_service_dml_examples.sql"
 
 if ! "${MYSQL[@]}" -Nse "SHOW DATABASES LIKE 'car_service_db'" | grep -q .; then
   echo ""
@@ -45,13 +45,13 @@ if ! "${MYSQL[@]}" -Nse "SHOW DATABASES LIKE 'car_service_db'" | grep -q .; then
   exit 0
 fi
 
-run_file "Relational algebra (car_service_db)" "$ROOT/1_relational_algebra_Koda/car_service_algebra_examples.sql"
-run_file "DQL (car_service_db)" "$ROOT/4_dql/car_service_dql_examples.sql"
-run_file "SQL clause order (car_service_db)" "$ROOT/5_order_commands/car_service_order_examples.sql"
-run_file "Subqueries (car_service_db)" "$ROOT/6_subqueries/car_service_subqueries_examples.sql"
-run_file "JOINs (car_service_db)" "$ROOT/7_join/car_service_join_examples.sql"
-run_file "Indexes lab (car_service_db)" "$ROOT/8_indexes/car_service_indexes_examples.sql"
-run_file "Transactions (car_service_db)" "$ROOT/9_transactions/car_service_transactions_examples.sql"
+run_file "Relational algebra (car_service_db)" "$ROOT/01_relational_algebra_Koda/car_service_algebra_examples.sql"
+run_file "DQL (car_service_db)" "$ROOT/04_dql/car_service_dql_examples.sql"
+run_file "SQL clause order (car_service_db)" "$ROOT/05_order_commands/car_service_order_examples.sql"
+run_file "Subqueries (car_service_db)" "$ROOT/06_subqueries/car_service_subqueries_examples.sql"
+run_file "JOINs (car_service_db)" "$ROOT/07_join/car_service_join_examples.sql"
+run_file "Indexes lab (car_service_db)" "$ROOT/08_indexes/car_service_indexes_examples.sql"
+run_file "Transactions (car_service_db)" "$ROOT/09_transactions/car_service_transactions_examples.sql"
 run_file "Window functions (car_service_db)" "$ROOT/10_windows_functions/car_service_windows_functions_examples.sql"
 run_file "Variables (car_service_db)" "$ROOT/11_variables/car_service_variables_examples.sql"
 run_file "Built-in functions (car_service_db)" "$ROOT/13_functions/car_service_functions_examples.sql"

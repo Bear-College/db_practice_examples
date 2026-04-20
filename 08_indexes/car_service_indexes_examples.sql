@@ -1,6 +1,6 @@
 -- Index lab for car_service_db — safe sandbox tables idx_lab, idx_geo
 -- Prerequisites: load database/car_service_db.sql.gz
---   mysql ... car_service_db < 8_indexes/car_service_indexes_examples.sql
+--   mysql ... car_service_db < 08_indexes/car_service_indexes_examples.sql
 -- MySQL 8.0+ recommended (functional indexes, EXPLAIN ANALYZE).
 --
 -- Manual speed test: run a section, note EXPLAIN / EXPLAIN ANALYZE; CREATE INDEX; re-run;

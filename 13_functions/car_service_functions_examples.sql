@@ -1,6 +1,6 @@
 -- Built-in SQL functions (MySQL) — car_service_db
 -- Not: user-defined functions (CREATE FUNCTION). String / numeric / date / conditional / utility.
---   mysql ... car_service_db < 12_functions/car_service_functions_examples.sql
+--   mysql ... car_service_db < 13_functions/car_service_functions_examples.sql
 
 USE car_service_db;
 

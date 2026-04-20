@@ -17,23 +17,23 @@ These exercises use **real table and column names** from the MySQL dump `databas
 
 ## Schema subset (from the dump)
 
-**customers** (`id`, `first_name`, `last_name`, `phone`, `email`)  
-**vehicles** (`id`, `customer_id`, `vin`, `plate`, `car`, `car_brands_id`) — FK `car_brands_id` → **car_brands**(`id`)  
-**car_brands** (`id`, `name`)  
-**work_orders** (`id`, `vehicle_id`, `mechanic_id`, `status`, `total_cost`)  
-**employees** (`id`, `first_name`, `last_name`, `role_id`)  
-**appointments** (`id`, `vehicle_id`, `scheduled_at`, `status`)  
-**order_jobs** (`id`, `work_order_id`, `job_type_id`, `price`)  
-**job_types** (`id`, `name`, `standard_hours`)  
-**parts** (`id`, `sku`, `name`, `brand`)  
-**inventory** (`id`, `part_id`, `warehouse_id`, `quantity`)  
-**warehouses** (`id`, `name`, `location`)  
-**blacklist** (`id`, `customer_id`, `reason`)  
-**loyalty_cards** (`id`, `customer_id`, `points`)  
-**feedback** (`id`, `customer_id`, `rating`, `comment`)  
-**marketing_consents** (`id`, `customer_id`, `email_ok`)
+- **customers** (`id`, `first_name`, `last_name`, `phone`, `email`)
+- **vehicles** (`id`, `customer_id`, `vin`, `plate`, `car`, `car_brands_id`) — FK `car_brands_id` → **car_brands**(`id`)
+- **car_brands** (`id`, `name`)
+- **work_orders** (`id`, `vehicle_id`, `mechanic_id`, `status`, `total_cost`)
+- **employees** (`id`, `first_name`, `last_name`, `role_id`)
+- **appointments** (`id`, `vehicle_id`, `scheduled_at`, `status`)
+- **order_jobs** (`id`, `work_order_id`, `job_type_id`, `price`)
+- **job_types** (`id`, `name`, `standard_hours`)
+- **parts** (`id`, `sku`, `name`, `brand`)
+- **inventory** (`id`, `part_id`, `warehouse_id`, `quantity`)
+- **warehouses** (`id`, `name`, `location`)
+- **blacklist** (`id`, `customer_id`, `reason`)
+- **loyalty_cards** (`id`, `customer_id`, `points`)
+- **feedback** (`id`, `customer_id`, `rating`, `comment`)
+- **marketing_consents** (`id`, `customer_id`, `email_ok`)
 
-Sample **work_orders.status** values in the data include: `new`, `in_progress`, `waiting_parts`, `completed`, `cancelled`.  
+Sample **work_orders.status** values in the data include: `new`, `in_progress`, `waiting_parts`, `completed`, `cancelled`.
 Sample **appointments.status** values include: `planned`, `confirmed`, `done`, `missed`.
 
 ---
@@ -42,7 +42,7 @@ Sample **appointments.status** values include: `planned`, `confirmed`, `done`, `
 
 **Task:** All work orders that are completed.
 
-**Algebra:**  
+**Algebra:**
 σ<sub>status = 'completed'</sub>(Work_orders)
 
 **SQL idea:** filter `work_orders` on `status`.
@@ -53,7 +53,7 @@ Sample **appointments.status** values include: `planned`, `confirmed`, `done`, `
 
 **Task:** List each part’s SKU and brand (no other columns).
 
-**Algebra:**  
+**Algebra:**
 π<sub>sku, brand</sub>(Parts)
 
 ---
@@ -62,7 +62,7 @@ Sample **appointments.status** values include: `planned`, `confirmed`, `done`, `
 
 **Task:** Email addresses for customers who have a phone number on file (`phone` not null).
 
-**Algebra:**  
+**Algebra:**
 π<sub>email</sub>(σ<sub>phone IS NOT NULL</sub>(Customers))
 
 ---
@@ -71,8 +71,8 @@ Sample **appointments.status** values include: `planned`, `confirmed`, `done`, `
 
 **Task:** For each work order, show the vehicle’s license plate and the work order total, but only if `total_cost > 1000`.
 
-**Algebra (theta-join on vehicle key):**  
-π<sub>wo.id, v.plate, wo.total_cost</sub>  
+**Algebra (theta-join on vehicle key):**
+π<sub>wo.id, v.plate, wo.total_cost</sub>
  σ<sub>wo.total_cost > 1000</sub>( ρ<sub>wo</sub>(Work_orders) ⋈<sub>wo.vehicle_id = v.id</sub> ρ<sub>v</sub>(Vehicles) )
 
 (ρ renames to disambiguate `id`; in SQL you use aliases `wo` and `v`.)
@@ -83,10 +83,10 @@ Sample **appointments.status** values include: `planned`, `confirmed`, `done`, `
 
 **Task:** For each work order id, show the customer’s first and last name (vehicle links customer to work order).
 
-**Algebra:**  
-π<sub>wo.id, c.first_name, c.last_name</sub>(  
- Work_orders ⋈<sub>wo.vehicle_id = v.id</sub> Vehicles ⋈<sub>v.customer_id = c.id</sub> Customers  
-)  
+**Algebra:**
+π<sub>wo.id, c.first_name, c.last_name</sub>(
+ Work_orders ⋈<sub>wo.vehicle_id = v.id</sub> Vehicles ⋈<sub>v.customer_id = c.id</sub> Customers
+)
 (with aliases `wo`, `v`, `c` in SQL).
 
 ---
@@ -95,7 +95,7 @@ Sample **appointments.status** values include: `planned`, `confirmed`, `done`, `
 
 **Task:** All distinct `customer_id` values that appear either on the blacklist **or** on a loyalty card with strictly positive points.
 
-**Algebra:**  
+**Algebra:**
 π<sub>customer_id</sub>(Blacklist) ∪ π<sub>customer_id</sub>(σ<sub>points > 0</sub>(Loyalty_cards))
 
 ---
@@ -104,7 +104,7 @@ Sample **appointments.status** values include: `planned`, `confirmed`, `done`, `
 
 **Task:** Customers who own at least one vehicle (appear as `vehicles.customer_id`) but are **not** on the blacklist.
 
-**Algebra:**  
+**Algebra:**
 π<sub>customer_id</sub>(Vehicles) − π<sub>customer_id</sub>(Blacklist)
 
 Use **duplicate-eliminating** projection (SQL `SELECT DISTINCT`).
@@ -115,7 +115,7 @@ Use **duplicate-eliminating** projection (SQL `SELECT DISTINCT`).
 
 **Task:** Customers who appear in **both** `feedback` and `marketing_consents` (same `customer_id` in both tables).
 
-**Algebra:**  
+**Algebra:**
 π<sub>customer_id</sub>(Feedback) ∩ π<sub>customer_id</sub>(Marketing_consents)
 
 ---
@@ -124,8 +124,8 @@ Use **duplicate-eliminating** projection (SQL `SELECT DISTINCT`).
 
 **Task:** Same relation `Customers`, but you only want attributes `id` and `email`, with `id` renamed to `cust_id` in the result.
 
-**Algebra:**  
-ρ<sub>CustLite(cust_id → id, email → email)</sub>( π<sub>id, email</sub>(Customers) )  
+**Algebra:**
+ρ<sub>CustLite(cust_id → id, email → email)</sub>( π<sub>id, email</sub>(Customers) )
 (Exact rename notation varies by textbook; in SQL: `id AS cust_id`.)
 
 ---
@@ -134,8 +134,8 @@ Use **duplicate-eliminating** projection (SQL `SELECT DISTINCT`).
 
 **Task:** For each mechanic (`work_orders.mechanic_id`), how many work orders do they have?
 
-**Extended:**  
-γ<sub>mechanic_id; COUNT(*) → wo_count</sub>(Work_orders)  
+**Extended:**
+γ<sub>mechanic_id; COUNT(*) → wo_count</sub>(Work_orders)
 (γ = grouping / aggregation; in SQL: `GROUP BY mechanic_id`.)
 
 ---
@@ -144,9 +144,9 @@ Use **duplicate-eliminating** projection (SQL `SELECT DISTINCT`).
 
 **Task:** List job type **name** and **price** for every line on work order `id = 1` (use `order_jobs` and `job_types`).
 
-**Algebra:**  
-π<sub>jt.name, oj.price</sub>(  
- σ<sub>oj.work_order_id = 1</sub>( ρ<sub>oj</sub>(Order_jobs) ⋈<sub>oj.job_type_id = jt.id</sub> ρ<sub>jt</sub>(Job_types) )  
+**Algebra:**
+π<sub>jt.name, oj.price</sub>(
+ σ<sub>oj.work_order_id = 1</sub>( ρ<sub>oj</sub>(Order_jobs) ⋈<sub>oj.job_type_id = jt.id</sub> ρ<sub>jt</sub>(Job_types) )
 )
 
 ---
@@ -155,10 +155,10 @@ Use **duplicate-eliminating** projection (SQL `SELECT DISTINCT`).
 
 **Task:** For rows where `quantity < 5`, show `warehouse` name, part `sku`, and `quantity`.
 
-**Algebra:**  
-π<sub>w.name, p.sku, inv.quantity</sub>(  
- σ<sub>inv.quantity < 5</sub>( Inventory ⋈ Parts ⋈ Warehouses on keys )  
-)  
+**Algebra:**
+π<sub>w.name, p.sku, inv.quantity</sub>(
+ σ<sub>inv.quantity < 5</sub>( Inventory ⋈ Parts ⋈ Warehouses on keys )
+)
 (Join `inventory.part_id = parts.id` and `inventory.warehouse_id = warehouses.id`.)
 
 ---
@@ -167,10 +167,10 @@ Use **duplicate-eliminating** projection (SQL `SELECT DISTINCT`).
 
 **Task:** Customers who have at least one appointment with status `confirmed` (list distinct customer id and name).
 
-**Algebra (semi-join style):**  
-π<sub>c.id, c.first_name, c.last_name</sub>(  
- Customers ⋉ ( Vehicles ⋈ Appointments where appointments.status = 'confirmed' )  
-)  
+**Algebra (semi-join style):**
+π<sub>c.id, c.first_name, c.last_name</sub>(
+ Customers ⋉ ( Vehicles ⋈ Appointments where appointments.status = 'confirmed' )
+)
 (“⋉” = semi-join; in SQL this is usually `EXISTS` or `INNER JOIN` with `DISTINCT`.)
 
 ---
@@ -179,7 +179,7 @@ Use **duplicate-eliminating** projection (SQL `SELECT DISTINCT`).
 
 **Task:** Pairs `(employee.id, role.id)` **only where** `employees.role_id = roles.id` — i.e. show that a θ-join is really σ( R × S ).
 
-**Algebra:**  
+**Algebra:**
 σ<sub>e.role_id = r.id</sub>( Employees × ρ<sub>r</sub>(Roles) )
 
 ---
@@ -188,9 +188,9 @@ Use **duplicate-eliminating** projection (SQL `SELECT DISTINCT`).
 
 **Task:** From `equivalents` (`part_id_1`, `part_id_2`), list SKUs for both sides of each pair.
 
-**Algebra:**  
-π<sub>p1.sku, p2.sku</sub>(  
- Equivalents ⋈<sub>part_id_1 = p1.id</sub> ρ<sub>p1</sub>(Parts) ⋈<sub>part_id_2 = p2.id</sub> ρ<sub>p2</sub>(Parts)  
+**Algebra:**
+π<sub>p1.sku, p2.sku</sub>(
+ Equivalents ⋈<sub>part_id_1 = p1.id</sub> ρ<sub>p1</sub>(Parts) ⋈<sub>part_id_2 = p2.id</sub> ρ<sub>p2</sub>(Parts)
 )
 
 ---

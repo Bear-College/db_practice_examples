@@ -1,10 +1,10 @@
 # JOINs — `car_service_db`
 
-Examples use **`car_service_db`** from **`database/car_service_db.sql.gz`**. The runnable script is **`7_join/car_service_join_examples.sql`**.
+Examples use **`car_service_db`** from **`database/car_service_db.sql.gz`**. The runnable script is **`07_join/car_service_join_examples.sql`**.
 
 ```bash
 gunzip -c database/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
-mysql -u ... -p ... car_service_db < 7_join/car_service_join_examples.sql
+mysql -u ... -p ... car_service_db < 07_join/car_service_join_examples.sql
 ```
 
 **Performance:** `WHERE … id BETWEEN …` and **`LIMIT`** keep large tables manageable in class.

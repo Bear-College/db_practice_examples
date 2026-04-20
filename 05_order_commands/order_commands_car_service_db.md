@@ -2,11 +2,11 @@
 
 У навчальних матеріалах наведено **порядок запису** фраз у запиті. Його варто дотримуватися, щоб синтаксис був коректним. Нижче — той самий порядок, що на слайді, з поясненням ролі кожної фрази та прикладами на базі **`car_service_db`** (дамп `database/car_service_db.sql.gz`).
 
-**Файл із запитами:** `5_order_commands/car_service_order_examples.sql` (з кореня репозиторію).
+**Файл із запитами:** `05_order_commands/car_service_order_examples.sql` (з кореня репозиторію).
 
 ```bash
 gunzip -c database/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
-mysql -u ... -p ... car_service_db < 5_order_commands/car_service_order_examples.sql
+mysql -u ... -p ... car_service_db < 05_order_commands/car_service_order_examples.sql
 ```
 
 **Важливо:** у движка логіка **обчислення** (спочатку `FROM`/`JOIN`, потім `WHERE`, потім `GROUP BY`/`HAVING`, у кінці `SELECT`-вирази, сортування й обрізання рядків) відрізняється від порядку **написання** — але **писати** треба саме в стандартному порядку нижче.

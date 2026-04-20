@@ -1,6 +1,6 @@
 -- JOIN examples (easy and hard) — car_service_db
 -- Load: gunzip -c database/car_service_db.sql.gz | mysql ... car_service_db
--- Run:  mysql ... car_service_db < 7_join/car_service_join_examples.sql
+-- Run:  mysql ... car_service_db < 07_join/car_service_join_examples.sql
 
 USE car_service_db;
 

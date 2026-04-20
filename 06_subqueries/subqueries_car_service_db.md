@@ -1,10 +1,10 @@
 # Subqueries — `car_service_db`
 
-Examples use **`car_service_db`** from **`database/car_service_db.sql.gz`**. The runnable script is **`6_subqueries/car_service_subqueries_examples.sql`**.
+Examples use **`car_service_db`** from **`database/car_service_db.sql.gz`**. The runnable script is **`06_subqueries/car_service_subqueries_examples.sql`**.
 
 ```bash
 gunzip -c database/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
-mysql -u ... -p ... car_service_db < 6_subqueries/car_service_subqueries_examples.sql
+mysql -u ... -p ... car_service_db < 06_subqueries/car_service_subqueries_examples.sql
 ```
 
 **Performance:** predicates use **`BETWEEN`** on `id` columns where helpful so large tables stay tractable.

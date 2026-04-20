@@ -4,7 +4,7 @@
 -- Database: load from database/car_service_db.sql.gz into `car_service_db`
 -- Usage (from repo root):
 --   gunzip -c database/car_service_db.sql.gz | mysql -u... -p... car_service_db
---   mysql -u... -p... car_service_db < 4_dql/car_service_dql_examples.sql
+--   mysql -u... -p... car_service_db < 04_dql/car_service_dql_examples.sql
 -- Large tables: predicates use bounded id ranges where helpful.
 
 USE car_service_db;

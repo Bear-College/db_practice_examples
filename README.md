@@ -6,21 +6,23 @@ Numbered topic folders contain **runnable SQL examples** and short companion **`
 
 | Folder | Topic (module notes) |
 |--------|----------------------|
-| `1_relational_algebra_Koda` | [Relational algebra](1_relational_algebra_Koda/algebra_Koda_car_service_db.md) |
-| `2_ddl` | [DDL](2_ddl/ddl_car_service_db.md) |
-| `3_dml` | [DML](3_dml/dml_car_service_db.md) |
-| `4_dql` | [DQL](4_dql/dql_car_service_db.md) |
-| `5_order_commands` | [SQL clause order](5_order_commands/order_commands_car_service_db.md) |
-| `6_subqueries` | [Subqueries](6_subqueries/subqueries_car_service_db.md) |
-| `7_join` | [JOINs](7_join/joins_car_service_db.md) |
-| `8_indexes` | [Indexes](8_indexes/indexes_car_service_db.md) |
-| `9_transactions` | [Transactions](9_transactions/transactions_car_service_db.md) |
+| `01_relational_algebra_Koda` | [Relational algebra](01_relational_algebra_Koda/algebra_Koda_car_service_db.md) |
+| `02_ddl` | [DDL](02_ddl/ddl_car_service_db.md) |
+| `03_dml` | [DML](03_dml/dml_car_service_db.md) |
+| `04_dql` | [DQL](04_dql/dql_car_service_db.md) |
+| `05_order_commands` | [SQL clause order](05_order_commands/order_commands_car_service_db.md) |
+| `06_subqueries` | [Subqueries](06_subqueries/subqueries_car_service_db.md) |
+| `07_join` | [JOINs](07_join/joins_car_service_db.md) |
+| `08_indexes` | [Indexes](08_indexes/indexes_car_service_db.md) |
+| `09_transactions` | [Transactions](09_transactions/transactions_car_service_db.md) |
 | `10_windows_functions` | [Window functions](10_windows_functions/windows_functions_car_service_db.md) |
 | `11_variables` | [Variables](11_variables/variables_car_service_db.md) |
 | `12_triggers` | [Triggers](12_triggers/triggers_car_service_db.md) |
 | `13_functions` | [Built-in / SQL functions](13_functions/functions_car_service_db.md) |
 | `14_procedures` | [Stored procedures](14_procedures/procedures_car_service_db.md) |
 | `15_cycles` | [Loops and recursive CTEs](15_cycles/cycles_car_service_db.md) |
+
+Folders **01**–**09** are zero-padded so the repository browser sorts them **1 … 15** (plain `1_` … `9_` would sort after `10_`).
 
 Each module usually pairs:
 

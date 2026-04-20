@@ -1,6 +1,6 @@
 -- Transactions — explicit BEGIN / COMMIT / ROLLBACK / SAVEPOINT on car_service_db
 -- Lab table only: tx_lab (dropped and recreated each run)
--- Run entire file in ONE mysql session: mysql ... car_service_db < 9_transactions/car_service_transactions_examples.sql
+-- Run entire file in ONE mysql session: mysql ... car_service_db < 09_transactions/car_service_transactions_examples.sql
 
 USE car_service_db;
 

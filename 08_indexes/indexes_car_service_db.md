@@ -2,11 +2,11 @@
 
 This module adds a **practice table** `idx_lab` (and a tiny `idx_geo` for **spatial** indexes) inside **`car_service_db`**. You can **`CREATE INDEX`** / **`DROP INDEX`** yourself and compare plans and timings **with vs without** an index.
 
-**Script:** `8_indexes/car_service_indexes_examples.sql`
+**Script:** `08_indexes/car_service_indexes_examples.sql`
 
 ```bash
 gunzip -c database/car_service_db.sql.gz | mysql -u ... -p ... car_service_db
-mysql -u ... -p ... car_service_db < 8_indexes/car_service_indexes_examples.sql
+mysql -u ... -p ... car_service_db < 08_indexes/car_service_indexes_examples.sql
 ```
 
 **Requirements:** MySQL **8.0+** recommended (functional indexes, `EXPLAIN ANALYZE`, expression indexes). Some statements are guarded with version notes in the `.sql` file.

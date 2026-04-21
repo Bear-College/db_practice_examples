@@ -1,0 +1,17 @@
+atlas_public_key  = "YOUR_ATLAS_PUBLIC_KEY"
+atlas_private_key = "YOUR_ATLAS_PRIVATE_KEY"
+atlas_org_id      = "YOUR_ATLAS_ORG_ID"
+
+project_name = "db-practice-atlas"
+cluster_name = "db-practice-free"
+atlas_region = "US_EAST_1"
+
+db_username = "dbpractice_user"
+db_password = "ChangeMe_StrongPassword123!"
+database_name = "db_practice"
+
+# True = open Atlas access from anywhere (0.0.0.0/0).
+allow_from_anywhere = true
+
+# Optional extra CIDRs if needed.
+allowed_cidrs = []

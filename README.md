@@ -97,6 +97,15 @@ pip install -r mongodb/requirements.txt
 python mongodb/01_connection_basics/example.py
 ```
 
+### Import MongoDB database
+
+From the repository root, seed the bundled **`edu_academy_business_target`** schema into database **`edu_seed`** (requires PyMongo; `--drop-db` replaces an existing `edu_seed`):
+
+```bash
+pip install -r mongodb/requirements.txt
+python database_mongo/dump/mongo.py --schema database_mongo/dump/schema.json --mongo-uri "mongodb://127.0.0.1:27017" --db edu_seed --drop-db
+```
+
 Run all Mongo examples (needs **`mongod`** on `localhost:27017` or set **`MONGODB_URI`**):
 
 ```bash

@@ -2,15 +2,10 @@
 
 This repository has two learning tracks:
 
-| Track | Folder | Stack |
-|---|---|---|
-| **Relational (MySQL)** | [`mysql/`](mysql/) | SQL scripts for `car_service_db` + SQLAlchemy examples |
-| **Document (MongoDB)** | [`mongodb/`](mongodb/) | Python + PyMongo lessons on local MongoDB |
-
-Detailed module structures are documented in:
-
-- [`mysql/README.md`](mysql/README.md)
-- [`mongodb/README.md`](mongodb/README.md)
+| Track | Folder | Stack | Module README |
+|---|---|---|---|
+| **Relational (MySQL)** | [`mysql/`](mysql/) | SQL scripts for `car_service_db` + SQLAlchemy examples | [`mysql/README.md`](mysql/README.md) |
+| **Document (MongoDB)** | [`mongodb/`](mongodb/) | Python + PyMongo lessons on local MongoDB | [`mongodb/README.md`](mongodb/README.md) |
 
 ---
 

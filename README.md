@@ -1,132 +1,95 @@
 # Database practice examples
 
-Two tracks live at the repository root:
+This repository has two learning tracks:
 
 | Track | Folder | Stack |
-|-------|--------|--------|
-| **Relational (MySQL)** | [`mysql/`](mysql/) | `.sql` scripts for **`car_service_db`**, plus [`mysql/16_orm/`](mysql/16_orm/) (Python + SQLAlchemy / SQLite) |
-| **Document (MongoDB)** | [`mongodb/`](mongodb/) | Python + **PyMongo** against a local **`mongod`** |
+|---|---|---|
+| **Relational (MySQL)** | [`mysql/`](mysql/) | SQL scripts for `car_service_db` + SQLAlchemy examples |
+| **Document (MongoDB)** | [`mongodb/`](mongodb/) | Python + PyMongo lessons on local MongoDB |
+
+Detailed module structures are documented in:
+
+- [`mysql/README.md`](mysql/README.md)
+- [`mongodb/README.md`](mongodb/README.md)
 
 ---
 
-## Relational — `mysql/`
+## MySQL quick start
 
-Numbered topic folders under **`mysql/`** contain **runnable SQL** and companion **`.md`** notes (relational algebra, DDL, DML, DQL, joins, indexes, transactions, windows, variables, triggers, functions, procedures, cycles). Module **`mysql/16_orm`** adds **SQLAlchemy ORM** samples in themed subfolders.
+Prerequisites:
 
-### Layout (MySQL)
+- MySQL server
+- `mysql` client in your `PATH`
 
-| Folder | Topic (module notes) |
-|--------|----------------------|
-| `mysql/01_relational_algebra_Koda` | [Relational algebra](mysql/01_relational_algebra_Koda/algebra_Koda_car_service_db.md) |
-| `mysql/02_ddl` | [DDL](mysql/02_ddl/ddl_car_service_db.md) |
-| `mysql/03_dml` | [DML](mysql/03_dml/dml_car_service_db.md) |
-| `mysql/04_dql` | [DQL](mysql/04_dql/dql_car_service_db.md) |
-| `mysql/05_order_commands` | [SQL clause order](mysql/05_order_commands/order_commands_car_service_db.md) |
-| `mysql/06_subqueries` | [Subqueries](mysql/06_subqueries/subqueries_car_service_db.md) |
-| `mysql/07_join` | [JOINs](mysql/07_join/joins_car_service_db.md) |
-| `mysql/08_indexes` | [Indexes](mysql/08_indexes/indexes_car_service_db.md) |
-| `mysql/09_transactions` | [Transactions](mysql/09_transactions/transactions_car_service_db.md) |
-| `mysql/10_windows_functions` | [Window functions](mysql/10_windows_functions/windows_functions_car_service_db.md) |
-| `mysql/11_variables` | [Variables](mysql/11_variables/variables_car_service_db.md) |
-| `mysql/12_triggers` | [Triggers](mysql/12_triggers/triggers_car_service_db.md) |
-| `mysql/13_functions` | [Built-in / SQL functions](mysql/13_functions/functions_car_service_db.md) |
-| `mysql/14_procedures` | [Stored procedures](mysql/14_procedures/procedures_car_service_db.md) |
-| `mysql/15_cycles` | [Loops and recursive CTEs](mysql/15_cycles/cycles_car_service_db.md) |
-| `mysql/16_orm` | [SQLAlchemy ORM topics](mysql/16_orm/orm_sqlalchemy.md) |
-
-Folders **`mysql/01`**–**`mysql/09`** are zero-padded so the file browser sorts them **1 … 16**.
-
-Each SQL module usually pairs:
-
-- `car_service_*_examples.sql` — run with the **mysql** client  
-- `*_car_service_db.md` — notes and commands
-
-Place the **`car_service_db`** dump under **`database_mysql/`** (see `.gitignore`) and load it before topics that need schema and data.
-
-### Prerequisites (MySQL)
-
-- **MySQL** server  
-- **`mysql` client** on your `PATH`
-
-### Load `car_service_db`
-
-```bash
-gunzip -c database_mysql/car_service_db.sql.gz | mysql -u YOUR_USER -p car_service_db
-```
-
-Or import the plain SQL dump directly:
+Load the database dump:
 
 ```bash
 mysql -h 127.0.0.1 -P 3306 -u root -p car_service_db < database_mysql/car_service_db.sql
 ```
 
-### Run all MySQL `.sql` examples
-
-From the **repository root** (wrapper keeps old paths working):
+Run all SQL examples:
 
 ```bash
 chmod +x verify_sql_examples.sh
 ./verify_sql_examples.sh
 ```
 
-Or run the script inside **`mysql/`** directly: `./mysql/verify_sql_examples.sh`
-
-Optional: `MYSQL_USER`, `MYSQL_ARGS`.
-
-### MySQL version
-
-Many examples assume **MySQL 8.0+**.
-
-### Python / SQLAlchemy (`mysql/16_orm`)
+ORM sample (optional):
 
 ```bash
 pip install -r mysql/16_orm/requirements.txt
 python mysql/16_orm/01_data_types/example.py
 ```
 
-SQLite lab files (`*.db`) are gitignored under `mysql/16_orm/`.
-
 ---
 
-## Document — `mongodb/`
+## MongoDB quick start
 
-[Topic index and setup](mongodb/mongodb_topics.md)
+Module docs:
 
-```bash
-pip install -r mongodb/requirements.txt
-python mongodb/01_connection_basics/example.py
-```
+- [`mongodb/README.md`](mongodb/README.md)
+- [`mongodb/mongodb_topics.md`](mongodb/mongodb_topics.md)
 
-### Import MongoDB database
-
-From the repository root, seed the bundled **`edu_academy_business_target`** schema into database **`edu_seed`** (requires PyMongo; `--drop-db` replaces an existing `edu_seed`):
+Install dependencies and run a lesson:
 
 ```bash
 pip install -r mongodb/requirements.txt
-python database_mongo/dump/mongo.py --schema database_mongo/dump/schema.json --mongo-uri "mongodb://127.0.0.1:27017" --db edu_seed --drop-db
+python mongodb/01_crud/example.py
 ```
+
+Restore bundled Mongo dump into `edu_academy_seed`:
 
 ```bash
-mongorestore --uri="mongodb://localhost:27017" --db=target_database_name ./edu_academy_seed
+mongorestore --uri="mongodb://localhost:27017" --db=edu_academy_seed ./edu_academy_seed
 ```
 
-Run all Mongo examples (needs **`mongod`** on `localhost:27017` or set **`MONGODB_URI`**):
+Or seed synthetic data from schema:
+
+```bash
+python database_mongo/dump/mongo.py --schema database_mongo/dump/schema.json --mongo-uri "mongodb://127.0.0.1:27017" --db edu_academy_seed --drop-db
+```
+
+Run all Mongo lessons:
 
 ```bash
 chmod +x mongodb/verify_mongodb_examples.sh
 ./mongodb/verify_mongodb_examples.sh
 ```
 
-**Large Mongo practice DB** — [`database_mongo/README.md`](database_mongo/README.md): **100 linked collections**, **200k** documents in fact tables, CSV + `mongoimport` + optional `seed_mongo.py` (all under **`database_mongo/`**).
+---
+
+## Large Mongo dataset
+
+For the larger dataset workflow, see [`database_mongo/README.md`](database_mongo/README.md).
 
 ---
 
 ## Repository layout (top level)
 
-```
+```text
 database/                 # optional MySQL dump (see .gitignore)
-database_mongo/           # MongoDB CSV export (car_workshop_mongo) + mongoimport script
-mysql/                    # relational SQL + ORM
-mongodb/                  # PyMongo examples + practice_db (seed / export / dump scripts)
-verify_sql_examples.sh    # delegates to mysql/verify_sql_examples.sh
+database_mongo/           # large MongoDB dataset and tooling
+mysql/                    # SQL + ORM lessons
+mongodb/                  # PyMongo lessons
+verify_sql_examples.sh    # root wrapper for mysql/verify_sql_examples.sh
 ```

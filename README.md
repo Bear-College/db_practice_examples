@@ -1,11 +1,12 @@
 # Database practice examples
 
-This repository has two learning tracks:
+This repository has three learning tracks:
 
 | Track | Folder | Stack | Module README |
 |---|---|---|---|
 | **Relational (MySQL)** | [`mysql/`](mysql/) | SQL scripts for `car_service_db` + SQLAlchemy examples | [`mysql/README.md`](mysql/README.md) |
 | **Document (MongoDB)** | [`mongodb/`](mongodb/) | Python + PyMongo lessons on local MongoDB | [`mongodb/README.md`](mongodb/README.md) |
+| **Cloud (AWS + Terraform)** | [`aws/`](aws/) | Terraform workflow for provisioning and remotely connecting to AWS RDS MySQL | [`aws/README.md`](aws/README.md) |
 
 ---
 

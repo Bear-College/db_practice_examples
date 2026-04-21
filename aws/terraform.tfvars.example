@@ -1,0 +1,15 @@
+aws_region        = "eu-central-1"
+project_name      = "db-practice"
+db_name           = "car_service_db"
+db_username       = "adminuser"
+db_password       = ""
+instance_class    = "db.t3.micro"
+allocated_storage = 20
+engine_version    = "8.0.36"
+
+# Replace with your current public IP in CIDR format.
+# Example: "203.0.113.25/32"
+allowed_cidr = "YOUR_PUBLIC_IP/32"
+
+publicly_accessible = true
+skip_final_snapshot = true

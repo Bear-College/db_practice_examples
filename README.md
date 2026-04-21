@@ -106,6 +106,10 @@ pip install -r mongodb/requirements.txt
 python database_mongo/dump/mongo.py --schema database_mongo/dump/schema.json --mongo-uri "mongodb://127.0.0.1:27017" --db edu_seed --drop-db
 ```
 
+```bash
+mongorestore --uri="mongodb://localhost:27017" --db=target_database_name ./edu_academy_seed
+```
+
 Run all Mongo examples (needs **`mongod`** on `localhost:27017` or set **`MONGODB_URI`**):
 
 ```bash

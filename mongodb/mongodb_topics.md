@@ -36,8 +36,9 @@ Or run everything (requires a live server):
 | [`07_pagination_sorting`](07_pagination_sorting/) | Result ordering and paging: `sort`, `skip`, `limit` |
 | [`08_filtering`](08_filtering/) | Combined filtering lesson: `find`, `find_one`, comparison, logical, nested, arrays, regex, `$exists` |
 | [`09_indexes`](09_indexes/) | Index management: single, compound, unique, text, TTL, hashed; configurable create/drop |
+| [`10_odm`](10_odm/) | Object Document Mapper with MongoEngine: model definition and CRUD |
 
-Data is written to lesson collections (`products`, `selection_queries_people`, `logical_operators_people`, `string_operators_people`, `check_operators_people`, `array_operators_people`, `pagination_sorting_products`, `filtering_people`, `indexes_people`) in database **`edu_academy_seed`** by default (override with `MONGODB_DB`). Scripts reset collection state so runs stay repeatable.
+Data is written to lesson collections (`products`, `selection_queries_people`, `logical_operators_people`, `string_operators_people`, `check_operators_people`, `array_operators_people`, `pagination_sorting_products`, `filtering_people`, `indexes_people`, `odm_products`) in database **`edu_academy_seed`** by default (override with `MONGODB_DB`). Scripts reset collection state so runs stay repeatable.
 
 ---
 

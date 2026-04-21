@@ -1,4 +1,4 @@
-# AWS RDS workflow with Terraform (`aws/`)
+# AWS RDS workflow with Terraform (`aws-terraform/`)
 
 This Terraform module provisions an AWS MySQL RDS instance and lets you connect to it remotely from:
 
@@ -24,7 +24,7 @@ It also creates the initial database (`db_name` variable), so you can start usin
 ## 1) Configure variables
 
 ```bash
-cd aws
+cd aws-terraform
 cp terraform.tfvars.example terraform.tfvars
 ```
 

@@ -76,20 +76,3 @@ chmod +x mongodb/verify_mongodb_examples.sh
 ./mongodb/verify_mongodb_examples.sh
 ```
 
----
-
-## Large Mongo dataset
-
-For the larger dataset workflow, see [`database_mongo/README.md`](database_mongo/README.md).
-
----
-
-## Repository layout (top level)
-
-```text
-database/                 # optional MySQL dump (see .gitignore)
-database_mongo/           # large MongoDB dataset and tooling
-mysql/                    # SQL + ORM lessons
-mongodb/                  # PyMongo lessons
-verify_sql_examples.sh    # root wrapper for mysql/verify_sql_examples.sh
-```

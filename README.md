@@ -6,7 +6,8 @@ This repository has three learning tracks:
 |---|---|---|---|
 | **Relational (MySQL)** | [`mysql/`](mysql/) | SQL scripts for `car_service_db` + SQLAlchemy examples | [`mysql/README.md`](mysql/README.md) |
 | **Document (MongoDB)** | [`mongodb/`](mongodb/) | Python + PyMongo lessons on local MongoDB | [`mongodb/README.md`](mongodb/README.md) |
-| **Cloud (AWS + Terraform)** | [`aws/`](aws/) | Terraform workflow for provisioning and remotely connecting to AWS RDS MySQL | [`aws/README.md`](aws/README.md) |
+| **Cloud (AWS + Terraform)** | [`aws-terraform/`](aws-terraform/) | Terraform workflow for provisioning and remotely connecting to AWS RDS MySQL | [`aws-terraform/README.md`](aws-terraform/README.md) |
+| **Cloud (MongoDB Atlas + Terraform)** | [`mongo-terraform/`](mongo-terraform/) | Terraform workflow for creating MongoDB Atlas M0 and remote connectivity | [`mongo-terraform/README.md`](mongo-terraform/README.md) |
 
 ---
 
@@ -23,14 +24,9 @@ Load the database dump:
 mysql -h 127.0.0.1 -P 3306 -u root -p car_service_db < database_mysql/car_service_db.sql
 ```
 
-Run all SQL examples:
-
-```bash
-chmod +x verify_sql_examples.sh
-./verify_sql_examples.sh
-```
-
 ORM sample (optional):
+
+ORM docs: [`mysql/16_orm/orm_sqlalchemy.md`](mysql/16_orm/orm_sqlalchemy.md)
 
 ```bash
 pip install -r mysql/16_orm/requirements.txt

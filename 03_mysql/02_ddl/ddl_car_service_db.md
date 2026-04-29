@@ -1,6 +1,11 @@
 # DDL (Data Definition Language) — `car_service_db` theme
 
-These examples use the **same domain** as the MySQL dump `01_database_mysql/car_service_db.sql.gz` (workshops, suppliers, parts, work orders). The **runnable script** lives in `car_service_ddl_examples.sql` and builds a small sandbox database **`ddl_practice`** so you do not modify or collide with tables inside `car_service_db`.
+These examples use the **same domain** as the MySQL dump `01_database_mysql/car_service_db.sql.gz` (workshops, suppliers, parts, work orders). The runnable scripts are:
+
+- `car_service_ddl_examples.sql` — broad DDL operations (`CREATE`, `ALTER`, `RENAME`, `VIEW`, cleanup)
+- `car_service_relationships_examples.sql` — relationship-focused DDL (one-to-many, many-to-many, self-reference, FK actions)
+
+Both scripts build a small sandbox database **`ddl_practice`** so you do not modify or collide with tables inside `car_service_db`.
 
 Pair each exercise below with the matching block in that `.sql` file.
 
@@ -145,10 +150,25 @@ Concepts you see in `car_service_db` that these exercises rehearse:
 
 ---
 
+## Relationship lab (extra file)
+
+Use `car_service_relationships_examples.sql` for focused relationship design practice:
+
+- Parent/child (`rel_customers` -> `rel_work_orders`)
+- Self-reference (`rel_technicians.manager_id` -> `rel_technicians.id`)
+- Many-to-many bridge (`rel_work_orders` <-> `rel_parts` via `rel_order_parts`)
+- FK actions (`RESTRICT`, `SET NULL`, `CASCADE`) and composite PK in the bridge table
+
+This lab includes minimal seed data and a verification join query.
+
+---
+
 ### How to run the SQL
 
 1. Open MySQL client.
-2. Run: `SOURCE …/car_service_ddl_examples.sql` or `mysql … < car_service_ddl_examples.sql`
+2. Run either script:
+   - `SOURCE …/car_service_ddl_examples.sql` or `mysql … < car_service_ddl_examples.sql`
+   - `SOURCE …/car_service_relationships_examples.sql` or `mysql … < car_service_relationships_examples.sql`
 3. Inspect: `USE ddl_practice; SHOW TABLES; SHOW CREATE TABLE …;`
 
 To compare with production-shaped names, load `car_service_db` from the gzipped dump and run `SHOW CREATE TABLE suppliers\G` side by side with `demo_suppliers`.

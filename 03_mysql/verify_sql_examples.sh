@@ -35,6 +35,7 @@ run_file() {
 }
 
 run_file "DDL (ddl_practice)" "$ROOT/02_ddl/car_service_ddl_examples.sql"
+run_file "DDL relationships (ddl_practice)" "$ROOT/02_ddl/car_service_relationships_examples.sql"
 run_file "DML (dml_practice)" "$ROOT/03_dml/car_service_dml_examples.sql"
 
 if ! "${MYSQL[@]}" -Nse "SHOW DATABASES LIKE 'car_service_db'" | grep -q .; then

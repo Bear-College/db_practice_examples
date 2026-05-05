@@ -1,6 +1,6 @@
 # MongoDB lessons index (`04_mongodb/`)
 
-This folder contains PyMongo lessons against local MongoDB.
+This folder contains PyMongo lessons against local MongoDB. Each numbered lesson that has `example.py` also includes a **`csharp/`** subfolder with the same exercises using the official **MongoDB .NET Driver** (SDK-style `Program.cs` plus a small `.csproj`).
 
 ## Module links
 
@@ -22,3 +22,14 @@ This folder contains PyMongo lessons against local MongoDB.
 - [`mongodb_topics.md`](mongodb_topics.md) — topic overview and setup
 - [`verify_mongodb_examples.sh`](verify_mongodb_examples.sh) — run all lesson scripts
 - [`requirements.txt`](requirements.txt) — Python dependencies
+
+### C# (.NET 8 + MongoDB.Driver)
+
+From a lesson folder:
+
+```bash
+cd 01_crud/csharp
+dotnet run
+```
+
+Same environment variables as Python: **`MONGODB_URI`**, **`MONGODB_DB`** (default database `edu_academy_seed`). Optional for the indexes lesson: **`MONGO_RUN_DROP_INDEXES=1`** to execute the drop-index block; **`MONGO_RUN_CREATE_INDEXES=0`** to skip creating indexes.

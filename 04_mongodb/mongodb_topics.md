@@ -1,11 +1,11 @@
 # MongoDB — document database examples (`04_mongodb/`)
 
-Runnable **Python + PyMongo** samples for MongoDB practice. Examples assume **MongoDB 6+** and a server on **`mongodb://localhost:27017`** (adjust via environment variables if needed).
+Runnable **Python + PyMongo** samples for MongoDB practice, plus a **parallel C# (.NET)** program in each lesson’s **`csharp/`** folder (**MongoDB.Driver**). Examples assume **MongoDB 6+** and a server on **`mongodb://localhost:27017`** (adjust via environment variables if needed).
 
 ## Setup
 
 ```bash
-cd mongodb
+cd 04_mongodb
 python -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
@@ -22,6 +22,15 @@ Or run everything (requires a live server):
 ```bash
 ./verify_mongodb_examples.sh
 ```
+
+Run the C# port of any lesson:
+
+```bash
+cd 04_mongodb/01_crud/csharp
+dotnet run
+```
+
+(`MONGODB_URI` / `MONGODB_DB` work the same as for Python.)
 
 ## Topics
 

@@ -8,6 +8,10 @@
 __pycache__/
 *.py[cod]
 
+# .NET build output (MongoDB lesson C# projects under 04_mongodb)
+04_mongodb/**/csharp/bin/
+04_mongodb/**/csharp/obj/
+
 # MongoDB practice dump archives (generate locally)
 04_mongodb/practice_db/dumps/*.archive
 04_mongodb/practice_db/dumps/*.gz

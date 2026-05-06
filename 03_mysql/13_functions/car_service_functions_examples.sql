@@ -5,12 +5,13 @@
 USE car_service_db;
 
 -- =============================================================================
--- F1 — String: CONCAT, UPPER, LOWER
+-- F1 — String: CONCAT, UPPER, LOWER, PROPER (CONCAT + SUBSTRING)
 -- =============================================================================
 SELECT id,
        CONCAT(first_name, ' ', last_name) AS full_name,
        LOWER(email) AS email_lower,
-       UPPER(last_name) AS last_upper
+       UPPER(last_name) AS last_upper,
+       CONCAT(UPPER(SUBSTRING(last_name, 1, 1)), lower(substring(last_name, 2))) AS last_proper
 FROM customers
 WHERE id BETWEEN 1 AND 150
 LIMIT 20;
@@ -122,3 +123,109 @@ FROM work_orders
 WHERE id BETWEEN 1 AND 5000
 GROUP BY status
 ORDER BY status;
+
+-- =============================================================================
+-- TASK SOLUTIONS (medium / high complexity)
+-- =============================================================================
+
+-- -----------------------------------------------------------------------------
+-- T1 — Customer contact normalization
+-- -----------------------------------------------------------------------------
+SELECT c.id AS customer_id,
+       CONCAT(c.first_name, ' ',
+              CONCAT(UPPER(SUBSTRING(c.last_name, 1, 1)), LOWER(SUBSTRING(c.last_name, 2)))) AS full_name,
+       COALESCE(c.phone, c.email, 'NO_CONTACT') AS primary_contact,
+       CASE
+           WHEN c.phone IS NOT NULL THEN 'PHONE'
+           WHEN c.phone IS NULL AND c.email IS NOT NULL THEN 'EMAIL'
+           ELSE 'NONE'
+       END AS contact_type,
+       CASE
+           WHEN c.email IS NULL OR c.email NOT LIKE '%@%' THEN 'NO_EMAIL'
+           ELSE CONCAT(LEFT(SUBSTRING_INDEX(c.email, '@', 1), 2), '***', '@', SUBSTRING_INDEX(c.email, '@', -1))
+       END AS masked_email
+FROM customers AS c
+WHERE c.id BETWEEN 1 AND 300
+LIMIT 50;
+
+-- -----------------------------------------------------------------------------
+-- T2 — Work order value segmentation
+-- -----------------------------------------------------------------------------
+SELECT wo.id,
+       wo.total_cost,
+       ROUND(wo.total_cost, 2) AS rounded_cost,
+       CASE
+           WHEN wo.total_cost < 300 THEN 'LOW'
+           WHEN wo.total_cost < 800 THEN 'MEDIUM'
+           ELSE 'HIGH'
+       END AS cost_segment,
+       ABS(wo.total_cost - 500) AS distance_from_avg_500
+FROM work_orders AS wo
+WHERE wo.id BETWEEN 1 AND 800
+ORDER BY wo.total_cost DESC
+LIMIT 40;
+
+-- -----------------------------------------------------------------------------
+-- T3 — Appointment urgency scoring
+-- -----------------------------------------------------------------------------
+SELECT a.id,
+       a.scheduled_at,
+       DATE_FORMAT(a.scheduled_at, '%Y-%m-%d %H:%i') AS scheduled_fmt,
+       TIMESTAMPDIFF(DAY, NOW(), a.scheduled_at) AS days_until_or_since,
+       CASE
+           WHEN TIMESTAMPDIFF(DAY, NOW(), a.scheduled_at) < 0 THEN 'OVERDUE'
+           WHEN TIMESTAMPDIFF(DAY, NOW(), a.scheduled_at) = 0 THEN 'TODAY'
+           WHEN TIMESTAMPDIFF(DAY, NOW(), a.scheduled_at) BETWEEN 1 AND 7 THEN 'SOON'
+           ELSE 'PLANNED'
+       END AS urgency_label
+FROM appointments AS a
+WHERE a.id BETWEEN 1 AND 400
+ORDER BY a.scheduled_at
+LIMIT 60;
+
+-- -----------------------------------------------------------------------------
+-- T4 — SKU quality checks
+-- -----------------------------------------------------------------------------
+SELECT p.id,
+       p.sku,
+       LENGTH(p.sku) AS sku_len,
+       CASE
+           WHEN p.sku REGEXP ' ' OR LENGTH(p.sku) < 6 THEN 'BAD'
+           ELSE 'GOOD'
+       END AS sku_quality,
+       UPPER(REPLACE(p.sku, ' ', '')) AS normalized_sku
+FROM parts AS p
+WHERE p.id BETWEEN 1 AND 1000
+LIMIT 60;
+
+-- -----------------------------------------------------------------------------
+-- T5 — Status-level cost analytics
+-- -----------------------------------------------------------------------------
+SELECT wo.status,
+       COUNT(*) AS orders_count,
+       MIN(wo.total_cost) AS min_cost,
+       MAX(wo.total_cost) AS max_cost,
+       ROUND(AVG(wo.total_cost), 2) AS avg_cost_2d,
+       MAX(wo.total_cost) - MIN(wo.total_cost) AS cost_span,
+       GROUP_CONCAT(wo.id ORDER BY wo.id SEPARATOR ',') AS sample_order_ids
+FROM work_orders AS wo
+WHERE wo.id BETWEEN 1 AND 5000
+GROUP BY wo.status
+ORDER BY avg_cost_2d DESC;
+
+-- -----------------------------------------------------------------------------
+-- T6 — Vehicle plate diagnostics
+-- -----------------------------------------------------------------------------
+SELECT v.id,
+       v.plate,
+       UPPER(TRIM(v.plate)) AS plate_clean,
+       LEFT(UPPER(TRIM(v.plate)), 2) AS prefix,
+       RIGHT(UPPER(TRIM(v.plate)), 2) AS suffix,
+       CASE
+           WHEN v.plate IS NULL OR TRIM(v.plate) = '' THEN 'MISSING'
+           WHEN LENGTH(TRIM(v.plate)) < 5 THEN 'SHORT'
+           ELSE 'OK'
+       END AS plate_flag
+FROM vehicles AS v
+WHERE v.id BETWEEN 1 AND 400
+LIMIT 50;

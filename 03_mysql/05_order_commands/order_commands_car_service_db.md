@@ -1,5 +1,7 @@
 # Порядок команд у SQL-запитах / SQL clause order — `car_service_db`
 
+> Translation / Переклад: [Українська](../../i18n/uk/03_mysql/05_order_commands/order_commands_car_service_db.md)
+
 У навчальних матеріалах наведено **порядок запису** фраз у запиті. Його варто дотримуватися, щоб синтаксис був коректним. Нижче — той самий порядок, що на слайді, з поясненням ролі кожної фрази та прикладами на базі **`car_service_db`** (дамп `01_database_mysql/car_service_db.sql.gz`).
 
 **Файл із запитами:** `05_order_commands/car_service_order_examples.sql` (з кореня репозиторію).

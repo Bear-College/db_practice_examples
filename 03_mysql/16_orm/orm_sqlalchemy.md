@@ -1,5 +1,7 @@
 # SQLAlchemy ORM — Python examples (`03_mysql/16_orm`)
 
+> Translation / Переклад: [Українська](../../i18n/uk/03_mysql/16_orm/orm_sqlalchemy.md)
+
 Self-contained demos for common relational/ORM topics. Each subfolder has an `example.py` you can run after installing dependencies.
 
 **Themes (from course outline):** data types, keys, relationship types, normalization vs denormalization, CRUD, JOINs, aggregates / `GROUP BY` / `HAVING`, migrations (Alembic).

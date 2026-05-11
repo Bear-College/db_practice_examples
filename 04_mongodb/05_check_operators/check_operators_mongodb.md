@@ -1,5 +1,7 @@
 # Check Operators in MongoDB (`05_check_operators`)
 
+> Translation / Переклад: [Українська](../../i18n/uk/04_mongodb/05_check_operators/check_operators_mongodb.md)
+
 This lesson demonstrates operators from the table:
 
 - `$exists` (checks whether a field exists)

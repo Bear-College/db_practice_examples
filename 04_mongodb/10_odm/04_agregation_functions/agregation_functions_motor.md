@@ -1,5 +1,7 @@
 # Aggregation Functions (`10_odm/04_agregation_functions`)
 
+> Translation / Переклад: [Українська](../../../i18n/uk/04_mongodb/10_odm/04_agregation_functions/agregation_functions_motor.md)
+
 Motor + MongoDB aggregation examples for:
 
 - `$match` (filter)

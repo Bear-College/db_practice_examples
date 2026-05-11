@@ -1,5 +1,7 @@
 # Indexes with Motor (`10_odm/03_indexes`)
 
+> Translation / Переклад: [Українська](../../../i18n/uk/04_mongodb/10_odm/03_indexes/indexes_motor.md)
+
 This module demonstrates index operations in MongoDB using **Motor** (async Python driver).
 
 ## Included index examples

@@ -1,5 +1,7 @@
 # Transactions — `car_service_db`
 
+> Translation / Переклад: [Українська](../../i18n/uk/03_mysql/09_transactions/transactions_car_service_db.md)
+
 Examples use a small lab table **`tx_lab`** inside **`car_service_db`** (loaded from **`01_database_mysql/car_service_db.sql.gz`**). The script creates the table, runs **`START TRANSACTION`** / **`COMMIT`** / **`ROLLBACK`** / **`SAVEPOINT`**, then optionally drops the table.
 
 **Scripts**

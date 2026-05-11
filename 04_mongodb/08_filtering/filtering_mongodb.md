@@ -1,5 +1,7 @@
 # Filtering in MongoDB (`08_filtering`)
 
+> Translation / Переклад: [Українська](../../i18n/uk/04_mongodb/08_filtering/filtering_mongodb.md)
+
 This lesson combines filtering techniques in one PyMongo script.
 
 ## Includes

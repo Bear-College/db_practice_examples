@@ -1,5 +1,7 @@
 # Database practice examples
 
+> Translation / Переклад: [Українська](i18n/uk/README_root.md)
+
 This repository has three learning tracks:
 
 | Track | Folder | Stack | Module README |

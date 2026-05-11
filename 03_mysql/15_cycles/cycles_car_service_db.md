@@ -1,5 +1,7 @@
 # Cycles (loops) — `car_service_db`
 
+> Translation / Переклад: [Українська](../../i18n/uk/03_mysql/15_cycles/cycles_car_service_db.md)
+
 “Cycles” here means **repeated execution** in SQL in two main ways:
 
 1. **Procedural loops** inside **`CREATE PROCEDURE`** — **`WHILE`**, **`REPEAT` … `UNTIL`**, and **`LOOP` … `LEAVE`** (MySQL stored programs).

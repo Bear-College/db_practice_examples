@@ -1,5 +1,7 @@
 # Subqueries — `car_service_db`
 
+> Translation / Переклад: [Українська](../../i18n/uk/03_mysql/06_subqueries/subqueries_car_service_db.md)
+
 Examples use **`car_service_db`** from **`01_database_mysql/car_service_db.sql.gz`**. The runnable script is **`06_subqueries/car_service_subqueries_examples.sql`**.
 
 ```bash

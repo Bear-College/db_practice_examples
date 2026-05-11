@@ -1,5 +1,7 @@
 # Array Operators in MongoDB (`06_array_operators`)
 
+> Translation / Переклад: [Українська](../../i18n/uk/04_mongodb/06_array_operators/array_operators_mongodb.md)
+
 This lesson demonstrates array operators from the table:
 
 - `$all` (all listed values must exist in the array)

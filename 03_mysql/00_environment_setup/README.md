@@ -1,5 +1,7 @@
 # 00 Environment Setup
 
+> Translation / Переклад: [Українська](../../i18n/uk/03_mysql/00_environment_setup/README.md)
+
 Prepare a local MySQL environment for all lessons in `03_mysql/`.
 
 ## Goal

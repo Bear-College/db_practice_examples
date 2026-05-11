@@ -1,5 +1,7 @@
 # 00 Dataset Bootstrap
 
+> Translation / Переклад: [Українська](../../i18n/uk/03_mysql/00_dataset_bootstrap/README.md)
+
 Load the training dataset into MySQL and verify it is ready for lessons.
 
 ## Goal

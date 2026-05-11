@@ -1,5 +1,7 @@
 # DDL (Data Definition Language) — `car_service_db` theme
 
+> Translation / Переклад: [Українська](../../i18n/uk/03_mysql/02_ddl/ddl_car_service_db.md)
+
 These examples use the **same domain** as the MySQL dump `01_database_mysql/car_service_db.sql.gz` (workshops, suppliers, parts, work orders). The runnable scripts are:
 
 - `car_service_ddl_examples.sql` — broad DDL operations (`CREATE`, `ALTER`, `RENAME`, `VIEW`, cleanup)

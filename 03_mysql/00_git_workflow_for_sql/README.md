@@ -1,5 +1,7 @@
 # 00 Git Workflow for SQL
 
+> Translation / Переклад: [Українська](../../i18n/uk/03_mysql/00_git_workflow_for_sql/README.md)
+
 Use a lightweight Git workflow for SQL exercises and review.
 
 ## Goal

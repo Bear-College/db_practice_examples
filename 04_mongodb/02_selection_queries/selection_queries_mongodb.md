@@ -1,5 +1,7 @@
 # Selection Queries in MongoDB (`02_selection_queries`)
 
+> Translation / Переклад: [Українська](../../i18n/uk/04_mongodb/02_selection_queries/selection_queries_mongodb.md)
+
 This lesson demonstrates comparison and list-selection operators from the table:
 
 - `$eq` (equals)

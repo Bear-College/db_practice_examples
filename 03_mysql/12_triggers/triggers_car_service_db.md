@@ -1,5 +1,7 @@
 # Triggers — `car_service_db`
 
+> Translation / Переклад: [Українська](../../i18n/uk/03_mysql/12_triggers/triggers_car_service_db.md)
+
 Examples install **InnoDB triggers** on small lab tables **`tri_lab_account`** and **`tri_lab_audit`** inside **`car_service_db`**. They demonstrate **`BEFORE INSERT`** (validation with **`SIGNAL`**), **`AFTER INSERT`**, **`BEFORE UPDATE`**, **`AFTER UPDATE`**, and **`AFTER DELETE`**.
 
 > **Folder name:** this module is **`12_triggers`** (triggers before functions in this repo’s numbering).

@@ -1,5 +1,7 @@
 # ODM Selection Operators (`10_odm/01_selection_operators`)
 
+> Translation / Переклад: [Українська](../../../i18n/uk/04_mongodb/10_odm/01_selection_operators/selection_operators_odm.md)
+
 MongoEngine examples for operators from the lesson table:
 
 - `$eq`, `$ne`, `$gt`, `$gte`, `$lt`, `$lte`

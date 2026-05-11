@@ -1,5 +1,7 @@
 # 00 Debugging Basics
 
+> Translation / Переклад: [Українська](../../i18n/uk/03_mysql/00_debugging_basics/README.md)
+
 Build a simple workflow for debugging SQL errors quickly and safely.
 
 ## Goal

@@ -1,5 +1,7 @@
 # Indexes — `car_service_db` lab
 
+> Translation / Переклад: [Українська](../../i18n/uk/03_mysql/08_indexes/indexes_car_service_db.md)
+
 This module adds a **practice table** `idx_lab` (and a tiny `idx_geo` for **spatial** indexes) inside **`car_service_db`**. You can **`CREATE INDEX`** / **`DROP INDEX`** yourself and compare plans and timings **with vs without** an index.
 
 **Script:** `08_indexes/car_service_indexes_examples.sql`

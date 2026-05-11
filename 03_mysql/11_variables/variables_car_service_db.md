@@ -1,5 +1,7 @@
 # Variables — `car_service_db`
 
+> Translation / Переклад: [Українська](../../i18n/uk/03_mysql/11_variables/variables_car_service_db.md)
+
 Examples show **MySQL session user variables** (`@name`), **assignment** from `SET` / `SELECT`, use in **`WHERE`** / **`LIMIT`**, **`PREPARE` / `EXECUTE`**, and a few **server/session system variables** (`@@…`). The script targets **`car_service_db`** (from **`01_database_mysql/car_service_db.sql.gz`**).
 
 **Script:** `11_variables/car_service_variables_examples.sql`

@@ -1,5 +1,7 @@
 # ODM with MongoEngine (`10_odm`)
 
+> Translation / Переклад: [Українська](../../i18n/uk/04_mongodb/10_odm/odm_mongoengine.md)
+
 This module shows how to use an ODM (Object Document Mapper) with MongoDB using **MongoEngine**.
 
 ## What is covered

@@ -1,5 +1,7 @@
 # Pagination and Sorting in MongoDB (`07_pagination_sorting`)
 
+> Translation / Переклад: [Українська](../../i18n/uk/04_mongodb/07_pagination_sorting/pagination_sorting_mongodb.md)
+
 This lesson demonstrates practical paging and ordering with **PyMongo**:
 
 - `sort(...)` for ordering

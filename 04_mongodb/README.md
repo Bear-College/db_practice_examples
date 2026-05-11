@@ -1,5 +1,7 @@
 # MongoDB lessons index (`04_mongodb/`)
 
+> Translation / Переклад: [Українська](../i18n/uk/04_mongodb/README.md)
+
 This folder contains PyMongo lessons against local MongoDB. Each numbered lesson that has `example.py` also includes a **`csharp/`** subfolder with the same exercises using the official **MongoDB .NET Driver** (SDK-style `Program.cs` plus a small `.csproj`).
 
 ## Module links

@@ -1,5 +1,7 @@
 # Search, Sorting, Pagination (`10_odm/02_search_sorting_pagination`)
 
+> Translation / Переклад: [Українська](../../../i18n/uk/04_mongodb/10_odm/02_search_sorting_pagination/search_sorting_pagination_motor_fastapi.md)
+
 This module demonstrates:
 
 - Search (text-like filtering via regex)

@@ -1,5 +1,7 @@
 # DQL (Data Query Language) — `car_service_db`
 
+> Translation / Переклад: [Українська](../../i18n/uk/03_mysql/04_dql/dql_car_service_db.md)
+
 These examples follow the **core `SELECT` themes** (basic clauses, `NULL`, rich `WHERE`, aggregates, `GROUP BY`, `HAVING`, `ORDER BY`, `DISTINCT`, `LIMIT` / `OFFSET`). They run on the real database loaded from **`01_database_mysql/car_service_db.sql.gz`** (database name: **`car_service_db`**).
 
 Runnable queries: **`04_dql/car_service_dql_examples.sql`** (from the repository root).

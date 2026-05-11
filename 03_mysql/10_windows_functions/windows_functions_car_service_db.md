@@ -1,5 +1,7 @@
 # Window functions — `car_service_db`
 
+> Translation / Переклад: [Українська](../../i18n/uk/03_mysql/10_windows_functions/windows_functions_car_service_db.md)
+
 Examples use **`car_service_db`** from **`01_database_mysql/car_service_db.sql.gz`**. The script is **`10_windows_functions/car_service_windows_functions_examples.sql`**.
 
 **Requirement:** MySQL **8.0+** (window functions are not available in MySQL 5.7).

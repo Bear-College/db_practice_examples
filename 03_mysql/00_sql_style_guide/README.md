@@ -1,5 +1,7 @@
 # 00 SQL Style Guide
 
+> Translation / Переклад: [Українська](../../i18n/uk/03_mysql/00_sql_style_guide/README.md)
+
 Use one consistent style across all SQL scripts in this repository.
 
 ## Goal

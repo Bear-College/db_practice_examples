@@ -1,5 +1,7 @@
 # MongoDB — document database examples (`04_mongodb/`)
 
+> Translation / Переклад: [Українська](../i18n/uk/04_mongodb/mongodb_topics.md)
+
 Runnable **Python + PyMongo** samples for MongoDB practice, plus a **parallel C# (.NET)** program in each lesson’s **`csharp/`** folder (**MongoDB.Driver**). Examples assume **MongoDB 6+** and a server on **`mongodb://localhost:27017`** (adjust via environment variables if needed).
 
 ## Setup

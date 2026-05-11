@@ -1,5 +1,7 @@
 # Logical Operators in MongoDB (`03_logical_operators`)
 
+> Translation / Переклад: [Українська](../../i18n/uk/04_mongodb/03_logical_operators/logical_operators_mongodb.md)
+
 This lesson demonstrates logical operators from the table:
 
 - `$and`

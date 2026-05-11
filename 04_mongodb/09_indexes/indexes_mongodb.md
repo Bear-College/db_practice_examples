@@ -1,5 +1,7 @@
 # Indexes in MongoDB (`09_indexes`)
 
+> Translation / Переклад: [Українська](../../i18n/uk/04_mongodb/09_indexes/indexes_mongodb.md)
+
 This lesson demonstrates index types with **PyMongo** on database **`edu_academy_seed`**:
 
 - Single field index

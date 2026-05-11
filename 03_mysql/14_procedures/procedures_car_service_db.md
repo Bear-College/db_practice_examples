@@ -1,5 +1,7 @@
 # Stored procedures — `car_service_db`
 
+> Translation / Переклад: [Українська](../../i18n/uk/03_mysql/14_procedures/procedures_car_service_db.md)
+
 Examples define **MySQL stored procedures** with **`IN`**, **`OUT`**, and **`INOUT`** parameters, **`DECLARE`** local variables, and **`CALL`**. They live in **`car_service_db`** (from **`01_database_mysql/car_service_db.sql.gz`**).
 
 **Script:** `14_procedures/car_service_procedures_examples.sql`

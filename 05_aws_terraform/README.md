@@ -1,5 +1,7 @@
 # AWS RDS workflow with Terraform (`05_aws_terraform/`)
 
+> Translation / Переклад: [Українська](../i18n/uk/05_aws_terraform/README.md)
+
 This Terraform module provisions an AWS MySQL RDS instance and lets you connect to it remotely from:
 
 - terminal (`mysql` CLI)

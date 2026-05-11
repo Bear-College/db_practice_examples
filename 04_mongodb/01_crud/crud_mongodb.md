@@ -1,5 +1,7 @@
 # CRUD in MongoDB (`01_crud`)
 
+> Translation / Переклад: [Українська](../../i18n/uk/04_mongodb/01_crud/crud_mongodb.md)
+
 This lesson uses **PyMongo** and runs against the MongoDB practice database from `02_database_mongo/`.
 
 Default connection settings in `example.py`:

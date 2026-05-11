@@ -1,5 +1,7 @@
 # MySQL lessons index (`03_mysql/`)
 
+> Translation / Переклад: [Українська](../i18n/uk/03_mysql/README.md)
+
 This folder contains SQL practice modules and an ORM module.
 
 ## Module links

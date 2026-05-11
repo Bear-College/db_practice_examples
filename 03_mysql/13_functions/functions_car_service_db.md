@@ -1,5 +1,7 @@
 # Built-in functions — `car_service_db`
 
+> Translation / Переклад: [Українська](../../i18n/uk/03_mysql/13_functions/functions_car_service_db.md)
+
 Examples use **`car_service_db`** (from **`01_database_mysql/car_service_db.sql.gz`**) and focus on common **MySQL built-in functions**: strings, numbers, dates, conditionals, and a few utilities. They are **not** stored routines (`CREATE FUNCTION`); those are a separate topic.
 
 **Script:** `13_functions/car_service_functions_examples.sql`

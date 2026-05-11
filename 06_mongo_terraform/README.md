@@ -1,5 +1,7 @@
 # MongoDB Atlas with Terraform (`06_mongo_terraform/`)
 
+> Translation / Переклад: [Українська](../i18n/uk/06_mongo_terraform/README.md)
+
 This module provisions a **MongoDB Atlas free-tier cluster (M0)** and configures access so you can connect remotely.
 
 It creates:

@@ -1,5 +1,7 @@
 # String Operators in MongoDB (`04_string_operators`)
 
+> Translation / Переклад: [Українська](../../i18n/uk/04_mongodb/04_string_operators/string_operators_mongodb.md)
+
 This lesson demonstrates operators from the table:
 
 - `$regex` (regular expression search; similar to SQL `LIKE`)

@@ -2,205 +2,1048 @@
 
 > Translation / Переклад: [English](../../../../03_mysql/01_relational_algebra_Koda/algebra_Koda_car_service_db.md)
 
-Ці вправи використовують **реальні імена таблиць і стовпців** з MySQL-дампу `01_database_mysql/car_service_db.sql.gz` (ім'я бази даних: `car_service_db`). Зіставте кожен алгебраїчний вираз із відповідним запитом у `car_service_algebra_examples.sql`.
+Ці вправи парують **підручникову нотацію реляційної алгебри** (Algebra Koda) з **MySQL**, що її реалізує. Кожна вправа працює на справжній базі з **`01_database_mysql/car_service_db.sql.gz`** (ім'я бази: **`car_service_db`**), а кожне «Розв'язання» взято дослівно з готового файлу-компаньйона [`01_relational_algebra_Koda/car_service_algebra_examples.sql`](../../../../03_mysql/01_relational_algebra_Koda/car_service_algebra_examples.sql).
 
-## Позначення
+```bash
+mysql -u root -e "CREATE DATABASE IF NOT EXISTS car_service_db;"
+gunzip -c 01_database_mysql/car_service_db.sql.gz | mysql -u root car_service_db
+mysql -u root car_service_db < 03_mysql/01_relational_algebra_Koda/car_service_algebra_examples.sql
+```
+
+**Зауваження щодо продуктивності:** у кожній основній таблиці ~100 000 рядків. Щоб «Очікуваний результат» був коротким, виводи нижче обрізані через `LIMIT` або `WHERE id BETWEEN …`; файл-компаньйон `.sql` подає алгебраїчну форму без обмежень, щоб ви бачили нефільтровану структуру.
+
+---
+
+## Шпаргалка з нотації
 
 | Символ | Значення |
 |--------|----------|
-| σ<sub>c</sub>(R) | Селекція: рядки R, для яких виконується умова c |
-| π<sub>A</sub>(R) | Проєкція: зберегти лише атрибути (стовпці) зі списку A |
-| R ⋈<sub>c</sub> S | Тета-з'єднання: об'єднати рядки за умовою c (натуральне з'єднання — окремий випадок, коли c — рівність за всіма спільними іменами) |
-| R × S | Декартів добуток |
-| R ∪ S, R − S, R ∩ S | Об'єднання, різниця, перетин (операнди мають бути **сумісні за об'єднанням**: однакова арність і сумісні типи) |
-| ρ<sub>R(a₁→b₁,…)</sub>(S) | Перейменування (відношення та/або атрибутів) |
-
-**Розширення (відповідність до SQL):** групування та агрегати (COUNT, SUM, …) у SQL виражаються через `GROUP BY`; «книжкова» реляційна алгебра часто розширюється **узагальненою проєкцією** або **агрегацією**; тут ми позначаємо це як **розширена RA → SQL**.
-
-## Підмножина схеми (з дампу)
-
-- **customers** (`id`, `first_name`, `last_name`, `phone`, `email`)
-- **vehicles** (`id`, `customer_id`, `vin`, `plate`, `car`, `car_brands_id`) — FK `car_brands_id` → **car_brands**(`id`)
-- **car_brands** (`id`, `name`)
-- **work_orders** (`id`, `vehicle_id`, `mechanic_id`, `status`, `total_cost`)
-- **employees** (`id`, `first_name`, `last_name`, `role_id`)
-- **appointments** (`id`, `vehicle_id`, `scheduled_at`, `status`)
-- **order_jobs** (`id`, `work_order_id`, `job_type_id`, `price`)
-- **job_types** (`id`, `name`, `standard_hours`)
-- **parts** (`id`, `sku`, `name`, `brand`)
-- **inventory** (`id`, `part_id`, `warehouse_id`, `quantity`)
-- **warehouses** (`id`, `name`, `location`)
-- **blacklist** (`id`, `customer_id`, `reason`)
-- **loyalty_cards** (`id`, `customer_id`, `points`)
-- **feedback** (`id`, `customer_id`, `rating`, `comment`)
-- **marketing_consents** (`id`, `customer_id`, `email_ok`)
-
-Приклади значень **work_orders.status** у даних: `new`, `in_progress`, `waiting_parts`, `completed`, `cancelled`.
-Приклади значень **appointments.status**: `planned`, `confirmed`, `done`, `missed`.
+| σ<sub>c</sub>(R) | **Селекція** — рядки R, для яких істинна умова c. SQL: `WHERE c`. |
+| π<sub>A</sub>(R) | **Проєкція** — лишити лише атрибути зі списку A. SQL: `SELECT A`. |
+| R ⋈<sub>c</sub> S | **Тета-з'єднання** — рядки з R × S, де істинна умова c. SQL: `INNER JOIN ... ON c`. |
+| R × S | **Декартів добуток**. SQL: `CROSS JOIN` або кома без `ON`. |
+| R ∪ S, R − S, R ∩ S | **Об'єднання, різниця, перетин** — операнди мають бути сумісні (та сама арність, сумісні типи). |
+| ρ<sub>R(a₁→b₁,…)</sub>(S) | **Перейменування** відношення та/або атрибутів. SQL: `AS`. |
+| γ<sub>g; f→c</sub>(R) | **Групування / агрегація** (розширена RA). SQL: `GROUP BY g` з агрегатом `f` під аліасом `c`. |
+| R ⋉ S | **Напівз'єднання** — рядки R, що мають збіг у S. SQL: `EXISTS` або `IN`. |
 
 ---
 
-## Вправа 1 — Селекція
+## Точки дотику зі схемою (з дампу)
 
-**Завдання:** усі робочі замовлення зі статусом `completed`.
+- **`customers`** — `id`, `first_name`, `last_name`, `phone`, `email`
+- **`vehicles`** — `id`, `customer_id`, `vin`, `plate`, `brand_id`, …
+- **`car_brands`** — `id`, `name`
+- **`work_orders`** — `id`, `vehicle_id`, `assigned_mechanic_id`, `status`, `total_cost`
+- **`employees`** — `id`, `first_name`, `last_name`, `role_id`
+- **`roles`** — `id`, `title`
+- **`appointments`** — `id`, `vehicle_id`, `scheduled_at`, `status`
+- **`order_jobs`** — `id`, `work_order_id`, `job_type_id`, `price`
+- **`job_types`** — `id`, `name`, `standard_hours`
+- **`parts`** — `id`, `sku`, `name`, `brand`
+- **`inventory`** — `id`, `part_id`, `warehouse_id`, `quantity`
+- **`warehouses`** — `id`, `name`, `location`
+- **`blacklist`** — `id`, `customer_id`, `reason`
+- **`loyalty_cards`** — `id`, `customer_id`, `points`
+- **`feedback`** — `id`, `customer_id`, `rating`, `comment`
+- **`marketing_consents`** — `id`, `customer_id`, `email_ok`
+- **`equivalents`** — `id`, `part_id_1`, `part_id_2`
 
-**Алгебра:**
-σ<sub>status = 'completed'</sub>(Work_orders)
-
-**Ідея SQL:** фільтрувати `work_orders` за `status`.
+Приклади значень **`work_orders.status`:** `new`, `in_progress`, `waiting_parts`, `completed`, `cancelled`.
+Приклади значень **`appointments.status`:** `planned`, `confirmed`, `done`, `missed`.
 
 ---
 
-## Вправа 2 — Проєкція
+## Вправа 1 — Селекція (σ)
 
-**Завдання:** перелічити SKU та бренд кожної деталі (більше нічого).
+### Контекст
 
-**Алгебра:**
-π<sub>sku, brand</sub>(Parts)
+Бухгалтер хоче бачити лише **закриті** замовлення на сьогодні — саме завершені замовлення породжують рахунки.
+
+### Чого ви навчитеся
+
+- Читати селекцію σ<sub>c</sub>(R) і перекладати її у `WHERE`.
+- Що селекція зберігає **всі** колонки `R` і фільтрує тільки рядки.
+
+### Задіяні таблиці
+
+| Таблиця | Колонки |
+|---|---|
+| `work_orders` | `id`, `vehicle_id`, `assigned_mechanic_id`, `status`, `total_cost` |
+
+### Завдання
+
+Повернути кожне замовлення зі `status = 'completed'`.
+
+**Алгебра:** σ<sub>status = 'completed'</sub>(Work_orders)
+
+### Очікуваний результат (реальні рядки з дампу — перші 8 з 20 000)
+
+```text
++----+------------+----------------------+-----------+------------+
+| id | vehicle_id | assigned_mechanic_id | status    | total_cost |
++----+------------+----------------------+-----------+------------+
+|  4 |          4 |                    4 | completed |     500.40 |
+|  9 |          9 |                    9 | completed |     500.90 |
+| 14 |         14 |                   14 | completed |     501.40 |
+| 19 |         19 |                   19 | completed |     501.90 |
+| 24 |         24 |                   24 | completed |     502.40 |
+| 29 |         29 |                   29 | completed |     502.90 |
+| 34 |         34 |                   34 | completed |     503.40 |
+| 39 |         39 |                   39 | completed |     503.90 |
+| ...|            |                      |           |            |
++----+------------+----------------------+-----------+------------+
+```
+
+### Підказка
+
+Селекція σ<sub>c</sub> = `WHERE`. Без проєкції — у `SELECT` всі атрибути.
+
+### Розв'язання
+
+```sql
+SELECT id, vehicle_id, assigned_mechanic_id, status, total_cost
+FROM work_orders
+WHERE status = 'completed';
+```
+
+### Покрокове пояснення
+
+1. **σ ↔ `WHERE`.** Селекція лише фільтрує рядки; схема не змінюється. Тому `SELECT` перелічує всі атрибути, які зберігає алгебра.
+2. **Порівняння рядків** — у одинарних лапках (`'completed'`). MySQL з типовим колейшеном `utf8mb4_0900_ai_ci` нечутливий до регістру, але дотримуйтесь канонічного нижнього регістру для портативності.
+3. **Скан без обмежень.** У запиті немає фільтра за `id`, тож на дампі він повертає 20 000 рядків — нормально для скрипту, але для UI додайте `WHERE id BETWEEN … AND …` або `LIMIT`, щоб не гнати весь результат по мережі.
+
+---
+
+## Вправа 2 — Проєкція (π)
+
+### Контекст
+
+Адміністратор каталогу хоче експорт «SKU → бренд» — тільки ці два стовпці, щоб файл був достатньо легким для Excel.
+
+### Чого ви навчитеся
+
+- **Проєкція** π<sub>A</sub>(R) — це і є список стовпців у `SELECT`.
+- У чистій множинній RA після проєкції видаляються дублікати; SQL зберігає їх, якщо не додати `DISTINCT`.
+
+### Задіяні таблиці
+
+| Таблиця | Колонки |
+|---|---|
+| `parts` | `sku`, `brand` |
+
+### Завдання
+
+Повернути SKU і бренд кожної запчастини.
+
+**Алгебра:** π<sub>sku, brand</sub>(Parts)
+
+### Очікуваний результат (реальні рядки з дампу — перші 10 зі 100 000)
+
+```text
++--------------+--------------+
+| sku          | brand        |
++--------------+--------------+
+| SKU-00000001 | PartBrand_1  |
+| SKU-00000002 | PartBrand_2  |
+| SKU-00000003 | PartBrand_3  |
+| SKU-00000004 | PartBrand_4  |
+| SKU-00000005 | PartBrand_5  |
+| SKU-00000006 | PartBrand_6  |
+| SKU-00000007 | PartBrand_7  |
+| SKU-00000008 | PartBrand_8  |
+| SKU-00000009 | PartBrand_9  |
+| SKU-00000010 | PartBrand_10 |
+| ...          |              |
++--------------+--------------+
+```
+
+### Підказка
+
+π<sub>A</sub> = список стовпців у `SELECT`. У алгебрі більш нічого немає → ні `WHERE`, ні `JOIN`.
+
+### Розв'язання
+
+```sql
+SELECT sku, brand
+FROM parts;
+```
+
+### Покрокове пояснення
+
+1. **π ↔ список стовпців у `SELECT`.** Форма результату містить рівно ті атрибути, які перелічені у π.
+2. **Bag vs set.** Чиста RA — це **множини** (без дублікатів). SQL — це **мультимножини**; якщо підручник чекає дедуплікації, пишіть `SELECT DISTINCT sku, brand FROM parts`.
+3. **Чому `sku` сам безпечний для проєкції.** У `parts` він `UNIQUE`, тож π<sub>sku</sub> уже не міститиме дублікатів.
 
 ---
 
 ## Вправа 3 — Селекція, потім проєкція
 
-**Завдання:** email-адреси клієнтів, у яких записано номер телефону (`phone` не NULL).
+### Контекст
 
-**Алгебра:**
-π<sub>email</sub>(σ<sub>phone IS NOT NULL</sub>(Customers))
+Маркетинг хоче надіслати follow-up email **лише** тим клієнтам, до яких ми можемо також зателефонувати — тобто з не-`NULL` `phone`. Експорт має бути плоским списком e-mail-ів.
+
+### Чого ви навчитеся
+
+- Композиція: π застосовується **після** σ.
+- Чому треба `IS NOT NULL`, ніколи `<> NULL`.
+
+### Задіяні таблиці
+
+| Таблиця | Колонки |
+|---|---|
+| `customers` | `email`, `phone` |
+
+### Завдання
+
+Повернути e-mail кожного клієнта з не-`NULL` `phone`.
+
+**Алгебра:** π<sub>email</sub>(σ<sub>phone IS NOT NULL</sub>(Customers))
+
+### Очікуваний результат (реальні рядки з дампу — перші 10 з ~100 000)
+
+```text
++------------------------+
+| email                  |
++------------------------+
+| customer1@example.com  |
+| customer2@example.com  |
+| customer3@example.com  |
+| customer4@example.com  |
+| customer5@example.com  |
+| customer6@example.com  |
+| customer7@example.com  |
+| customer8@example.com  |
+| customer9@example.com  |
+| customer10@example.com |
+| ...                    |
++------------------------+
+```
+
+### Підказка
+
+Дві операції, один запит: `WHERE phone IS NOT NULL` — це σ, `SELECT email` — це π.
+
+### Розв'язання
+
+```sql
+SELECT email
+FROM customers
+WHERE phone IS NOT NULL;
+```
+
+### Покрокове пояснення
+
+1. **Композиція читається зсередини назовні.** Першою працює σ (фільтрує рядки), потім π (лишає `email`).
+2. **`IS NOT NULL`, ніколи `<> NULL`.** `phone <> NULL` повертає `UNKNOWN`, який `WHERE` трактує як «викинути рядок» — тож відсікаються геть усі.
+3. **Результат — мультимножина e-mail-ів.** У цьому дампі `email` `UNIQUE`, тож дублікатів немає; у загальному випадку після проєкції зазвичай хочеться `SELECT DISTINCT`.
 
 ---
 
 ## Вправа 4 — Тета-з'єднання (двох відношень)
 
-**Завдання:** для кожного робочого замовлення показати номерний знак авто та підсумкову суму замовлення, але лише за умови `total_cost > 1000`.
+### Контекст
 
-**Алгебра (тета-з'єднання за ключем авто):**
-π<sub>wo.id, v.plate, wo.total_cost</sub>
- σ<sub>wo.total_cost > 1000</sub>( ρ<sub>wo</sub>(Work_orders) ⋈<sub>wo.vehicle_id = v.id</sub> ρ<sub>v</sub>(Vehicles) )
+Власник хоче швидкий вигляд «дорогих робіт» з номером авто — щоб механік, дивлячись у список, одразу бачив, до якого авто належить кожне дороге замовлення.
 
-(ρ перейменовує для усунення неоднозначності `id`; у SQL — аліаси `wo` та `v`.)
+### Чого ви навчитеся
+
+- **Тета-з'єднання** R ⋈<sub>c</sub> S як `INNER JOIN ... ON c`.
+- Чому **аліаси** (ρ) є необхідними для усунення неоднозначності `id`, який є в обох таблицях.
+
+### Задіяні таблиці
+
+| Таблиця | Колонки |
+|---|---|
+| `work_orders` | `id`, `vehicle_id`, `total_cost` |
+| `vehicles` | `id`, `plate` |
+
+### Завдання
+
+Для кожного замовлення з `total_cost > 1000` показати id замовлення, номер авто і вартість.
+
+**Алгебра:** π<sub>wo.id, v.plate, wo.total_cost</sub>( σ<sub>wo.total_cost > 1000</sub>( ρ<sub>wo</sub>(Work_orders) ⋈<sub>wo.vehicle_id = v.id</sub> ρ<sub>v</sub>(Vehicles) ) )
+
+### Очікуваний результат (реальні рядки з дампу — перші 8)
+
+```text
++------+----------+------------+
+| id   | plate    | total_cost |
++------+----------+------------+
+| 5001 | AA5001BB |    1000.10 |
+| 5002 | AA5002BB |    1000.20 |
+| 5003 | AA5003BB |    1000.30 |
+| 5004 | AA5004BB |    1000.40 |
+| 5005 | AA5005BB |    1000.50 |
+| 5006 | AA5006BB |    1000.60 |
+| 5007 | AA5007BB |    1000.70 |
+| 5008 | AA5008BB |    1000.80 |
+| ...  |          |            |
++------+----------+------------+
+```
+
+### Підказка
+
+Дайте два аліаси (`wo`, `v`), з'єднайте за зовнішнім ключем, потім відфільтруйте за вартістю.
+
+### Розв'язання
+
+```sql
+SELECT wo.id, v.plate, wo.total_cost
+FROM work_orders AS wo
+INNER JOIN vehicles AS v ON wo.vehicle_id = v.id
+WHERE wo.total_cost > 1000;
+```
+
+### Покрокове пояснення
+
+1. **`INNER JOIN ... ON c`** — це SQL-форма R ⋈<sub>c</sub> S. Секція `ON` — це предикат з'єднання з алгебри.
+2. **Аліаси замінюють ρ.** Обидві таблиці мають `id`; без `AS wo`/`AS v` MySQL не зрозуміє, який саме `id` мати на увазі в `SELECT` / `ORDER BY`.
+3. **Предикат σ** (`wo.total_cost > 1000`) — у `WHERE`, не в `ON`. Для `INNER JOIN` обидва варіанти дають однаковий результат, але виносити нез'єднувальні фільтри у `WHERE` корисно: коли пізніше зміниш на `LEFT JOIN`, не отримаєш сюрпризів.
 
 ---
 
 ## Вправа 5 — Ланцюг з'єднань (трьох відношень)
 
-**Завдання:** для кожного `id` робочого замовлення показати ім'я та прізвище клієнта (vehicle пов'язує клієнта з замовленням).
+### Контекст
 
-**Алгебра:**
-π<sub>wo.id, c.first_name, c.last_name</sub>(
- Work_orders ⋈<sub>wo.vehicle_id = v.id</sub> Vehicles ⋈<sub>v.customer_id = c.id</sub> Customers
-)
-(із аліасами `wo`, `v`, `c` у SQL).
+Приймальня хоче друкувати для кожного замовлення **«№X — власник Іван Петренко»**. Прямого зв'язку клієнт↔замовлення немає; зв'язок іде через `vehicles`.
+
+### Чого ви навчитеся
+
+- Ланцюжкові два `JOIN`-и через міст-таблицю.
+- Що для `INNER JOIN` **порядок з'єднання не змінює семантики** (може змінити план виконання).
+
+### Задіяні таблиці
+
+| Таблиця | Колонки |
+|---|---|
+| `work_orders` | `id`, `vehicle_id` |
+| `vehicles` | `id`, `customer_id` |
+| `customers` | `id`, `first_name`, `last_name` |
+
+### Завдання
+
+Для кожного замовлення повернути його id і ім'я+прізвище власника.
+
+**Алгебра:** π<sub>wo.id, c.first_name, c.last_name</sub>( Work_orders ⋈<sub>wo.vehicle_id = v.id</sub> Vehicles ⋈<sub>v.customer_id = c.id</sub> Customers )
+
+### Очікуваний результат (реальні рядки з дампу — перші 8 зі 100 000)
+
+```text
++---------------+------------+-----------+
+| work_order_id | first_name | last_name |
++---------------+------------+-----------+
+|             1 | Name_1     | Surname_1 |
+|             2 | Name_2     | Surname_2 |
+|             3 | Name_3     | Surname_3 |
+|             4 | Name_4     | Surname_4 |
+|             5 | Name_5     | Surname_5 |
+|             6 | Name_6     | Surname_6 |
+|             7 | Name_7     | Surname_7 |
+|             8 | Name_8     | Surname_8 |
+| ...           |            |           |
++---------------+------------+-----------+
+```
+
+### Підказка
+
+Два `INNER JOIN` поспіль. Дотримуйтесь `ON` для кожного кроку: `wo.vehicle_id = v.id`, потім `v.customer_id = c.id`.
+
+### Розв'язання
+
+```sql
+SELECT wo.id AS work_order_id,
+       c.first_name,
+       c.last_name
+FROM work_orders AS wo
+INNER JOIN vehicles AS v ON wo.vehicle_id = v.id
+INNER JOIN customers AS c ON v.customer_id = c.id;
+```
+
+### Покрокове пояснення
+
+1. **Кожен `JOIN` додає одне відношення** зі своїм предикатом `ON`. Забути `ON` — отримати декартів добуток (тут це було б ~10¹⁵ рядків!).
+2. **`wo.id AS work_order_id`** перейменовує проєкцію, щоб у результаті не було двох `id`. Цей аліас зручний у похідних views та join-ах.
+3. **Асоціативність inner-join.** `(A ⋈ B) ⋈ C ≡ A ⋈ (B ⋈ C)`; оптимізатор MySQL може переставляти таблиці залежно від індексів та кардинальності.
 
 ---
 
-## Вправа 6 — Об'єднання (сумісних за об'єднанням проєкцій)
+## Вправа 6 — Об'єднання (∪)
 
-**Завдання:** усі унікальні значення `customer_id`, що з'являються або у чорному списку, **або** на лояльнісній картці зі строго додатними балами.
+### Контекст
 
-**Алгебра:**
-π<sub>customer_id</sub>(Blacklist) ∪ π<sub>customer_id</sub>(σ<sub>points > 0</sub>(Loyalty_cards))
+Комплаєнсу потрібне об'єднання двох сегментів «цікавих клієнтів»: ті, що в чорному списку, і ті, що активно користуються програмою лояльності (`points > 0`). По одному id на рядок.
+
+### Чого ви навчитеся
+
+- `UNION` у SQL реалізує ∪; **операнди мають бути сумісними** (та сама кількість стовпців, сумісні типи).
+- `UNION` усуває дублікати; `UNION ALL` — мультимножинна версія.
+
+### Задіяні таблиці
+
+| Таблиця | Колонки |
+|---|---|
+| `blacklist` | `customer_id` |
+| `loyalty_cards` | `customer_id`, `points` |
+
+### Завдання
+
+Повернути кожний `customer_id`, що з'являється або у чорному списку, **або** на лояльнісній картці з додатними балами.
+
+**Алгебра:** π<sub>customer_id</sub>(Blacklist) ∪ π<sub>customer_id</sub>(σ<sub>points > 0</sub>(Loyalty_cards))
+
+### Очікуваний результат (реальні рядки з дампу — перші 12)
+
+```text
++-------------+
+| customer_id |
++-------------+
+|           1 |
+|           2 |
+|           3 |
+|           4 |
+|           5 |
+|           6 |
+|           7 |
+|           8 |
+|           9 |
+|          10 |
+|          11 |
+|          12 |
+| ...         |
++-------------+
+```
+
+### Підказка
+
+Два блоки `SELECT customer_id`, з'єднані через `UNION`. σ застосовується тільки до loyalty-сторони.
+
+### Розв'язання
+
+```sql
+SELECT customer_id FROM blacklist
+UNION
+SELECT customer_id FROM loyalty_cards WHERE points > 0;
+```
+
+### Покрокове пояснення
+
+1. **Перевірка сумісності.** Обидва `SELECT` повинні мати ту саму арність (тут — 1) і сумісні типи (обидва `INT`).
+2. **`UNION` усуває дублікати.** Це відповідає **множинній** семантиці ∪. Якщо треба зберегти всі входження, використовуйте `UNION ALL` — він і швидший, бо MySQL не робить sort/hash для дедуплікації.
+3. **σ запхана всередину.** Розміщення `WHERE points > 0` лише на loyalty-гілці — це буквальний переклад σ всередині другої проєкції.
 
 ---
 
-## Вправа 7 — Різниця множин
+## Вправа 7 — Різниця множин (−)
 
-**Завдання:** клієнти, які мають принаймні одне авто (з'являються як `vehicles.customer_id`) і яких **немає** в чорному списку.
+### Контекст
 
-**Алгебра:**
-π<sub>customer_id</sub>(Vehicles) − π<sub>customer_id</sub>(Blacklist)
+Відділ продажів хоче обдзвонити **усіх клієнтів із зареєстрованим авто, які НЕ в чорному списку**. Різниця множин — натуральний оператор.
 
-Використовуйте проєкцію **з усуненням дублікатів** (у SQL — `SELECT DISTINCT`).
+### Чого ви навчитеся
+
+- Реалізувати R − S у SQL через `NOT EXISTS` (рекомендовано) — це обходить пастку з `NULL` у `NOT IN`.
+- Чому потрібен `SELECT DISTINCT`: один клієнт може мати кілька авто.
+
+### Задіяні таблиці
+
+| Таблиця | Колонки |
+|---|---|
+| `vehicles` | `customer_id` |
+| `blacklist` | `customer_id` |
+
+### Завдання
+
+Повернути унікальні `customer_id`, що є в `vehicles`, але відсутні у (тестовому) чорному списку (`b.id <= 10`).
+
+**Алгебра:** π<sub>customer_id</sub>(Vehicles) − π<sub>customer_id</sub>(Blacklist)
+
+### Очікуваний результат (реальні рядки з дампу — вибірка по `v.id BETWEEN 1 AND 50`)
+
+```text
++-------------+
+| customer_id |
++-------------+
+|          11 |
+|          12 |
+|          13 |
+|          14 |
+|          15 |
+|          16 |
+|          17 |
+|          18 |
+|          19 |
+|          20 |
+| ...         |
++-------------+
+```
+
+### Підказка
+
+`NOT EXISTS` повертає рядки лівої частини, ключа яких немає праворуч. Огорніть `SELECT customer_id` у `DISTINCT`, бо в одного клієнта може бути декілька авто.
+
+### Розв'язання
+
+```sql
+SELECT DISTINCT v.customer_id
+FROM vehicles AS v
+WHERE v.customer_id IS NOT NULL
+  AND NOT EXISTS (
+    SELECT 1 FROM blacklist AS b WHERE b.customer_id = v.customer_id AND b.id <= 10
+  );
+```
+
+### Покрокове пояснення
+
+1. **`NOT EXISTS` ≡ −.** Корельований підзапит каже «не існує відповідного рядка праворуч» — точно предикат різниці множин.
+2. **Уникайте `NOT IN`.** `WHERE col NOT IN (SELECT x FROM s)` повертає `UNKNOWN`, якщо серед `x` є `NULL`, — а отже **жоден** рядок не повернеться. `NOT EXISTS` коректно працює з `NULL`.
+3. **`DISTINCT` зберігає множинну семантику.** Чиста RA — множинна, SQL — мультимножинний, тож дедуплікуємо вручну.
 
 ---
 
-## Вправа 8 — Перетин
+## Вправа 8 — Перетин (∩)
 
-**Завдання:** клієнти, які є **одночасно** в `feedback` і в `marketing_consents` (однаковий `customer_id` в обох таблицях).
+### Контекст
 
-**Алгебра:**
-π<sub>customer_id</sub>(Feedback) ∩ π<sub>customer_id</sub>(Marketing_consents)
+Кампанія потребує клієнтів, які **одночасно** залишили відгук **і** дали згоду на маркетинг — це теплі ліди, готові до контакту.
+
+### Чого ви навчитеся
+
+- ∩ у SQL через `INNER JOIN ... USING(customer_id)` + `DISTINCT` або `INTERSECT` (MySQL 8.0.31+).
+- Чому `DISTINCT` важливий, коли одна зі сторін має кілька збігів на ключ.
+
+### Задіяні таблиці
+
+| Таблиця | Колонки |
+|---|---|
+| `feedback` | `customer_id` |
+| `marketing_consents` | `customer_id` |
+
+### Завдання
+
+Повернути унікальні `customer_id`, наявні **в обох** таблицях.
+
+**Алгебра:** π<sub>customer_id</sub>(Feedback) ∩ π<sub>customer_id</sub>(Marketing_consents)
+
+### Очікуваний результат (реальні рядки з дампу — перші 10 з ~100 000)
+
+```text
++-------------+
+| customer_id |
++-------------+
+|           1 |
+|           2 |
+|           3 |
+|           4 |
+|           5 |
+|           6 |
+|           7 |
+|           8 |
+|           9 |
+|          10 |
+| ...         |
++-------------+
+```
+
+### Підказка
+
+`INNER JOIN` за спільним стовпцем + `DISTINCT`; `INTERSECT` — компактніший варіант на сучасному MySQL.
+
+### Розв'язання
+
+```sql
+SELECT DISTINCT f.customer_id
+FROM feedback AS f
+INNER JOIN marketing_consents AS m ON f.customer_id = m.customer_id;
+
+-- Альтернатива (MySQL 8.0.31+ / 9.x):
+-- SELECT customer_id FROM feedback
+-- INTERSECT
+-- SELECT customer_id FROM marketing_consents;
+```
+
+### Покрокове пояснення
+
+1. **Inner join тримає лише матчі з обох сторін** — це і потрібно для ∩.
+2. **`DISTINCT` критичний.** Без нього клієнт з трьома записами у `feedback` з'явиться тричі, хоча перетин трактує його як одне значення.
+3. **`INTERSECT` — підручниковий оператор.** MySQL отримав його у 8.0.31; раніше використовували `INNER JOIN`-шаблон.
 
 ---
 
-## Вправа 9 — Перейменування (для читабельності)
+## Вправа 9 — Перейменування (ρ)
 
-**Завдання:** те саме відношення `Customers`, але потрібні лише атрибути `id` та `email`, причому `id` перейменовано на `cust_id`.
+### Контекст
 
-**Алгебра:**
-ρ<sub>CustLite(cust_id → id, email → email)</sub>( π<sub>id, email</sub>(Customers) )
-(Точна нотація перейменування різниться між підручниками; у SQL: `id AS cust_id`.)
+`VIEW`, який віддається BI-інструменту, мусить називати `id` як `cust_id` — саме це ім'я BI-команда захардкодила у дашбордах.
+
+### Чого ви навчитеся
+
+- `AS` у SQL — головний інструмент для ρ алгебри.
+- Перейменування діє і на стовпці, і на цілі таблиці.
+
+### Задіяні таблиці
+
+| Таблиця | Колонки |
+|---|---|
+| `customers` | `id`, `email` |
+
+### Завдання
+
+Спроєктувати `id` і `email`, перейменувавши `id` на `cust_id`.
+
+**Алгебра:** ρ<sub>CustLite(cust_id ← id, email ← email)</sub>( π<sub>id, email</sub>(Customers) )
+
+### Очікуваний результат (реальні рядки з дампу — перші 10)
+
+```text
++---------+------------------------+
+| cust_id | email                  |
++---------+------------------------+
+|       1 | customer1@example.com  |
+|       2 | customer2@example.com  |
+|       3 | customer3@example.com  |
+|       4 | customer4@example.com  |
+|       5 | customer5@example.com  |
+|       6 | customer6@example.com  |
+|       7 | customer7@example.com  |
+|       8 | customer8@example.com  |
+|       9 | customer9@example.com  |
+|      10 | customer10@example.com |
+| ...     |                        |
++---------+------------------------+
+```
+
+### Підказка
+
+`column AS alias` — для перейменування стовпця; `FROM table AS t` — для перейменування таблиці.
+
+### Розв'язання
+
+```sql
+SELECT id AS cust_id, email
+FROM customers;
+```
+
+### Покрокове пояснення
+
+1. **`AS` у MySQL необов'язковий** (`id cust_id` теж працює), але писати його — добрий тон, який зрозуміло читається.
+2. **Перейменування діє на рівні результату**, не на рівні сховища — стовпець у таблиці й далі зветься `id`.
+3. **Перейменування критичні в само-з'єднаннях** (Вправа 15). Без них MySQL не може розрізнити дві посилання на ту саму фізичну таблицю.
 
 ---
 
-## Вправа 10 — З'єднання + агрегація (розширена RA → SQL)
+## Вправа 10 — Групування + агрегат (розширена RA → SQL)
 
-**Завдання:** скільки робочих замовлень припадає на кожного механіка (`work_orders.mechanic_id`)?
+### Контекст
 
-**Розширення:**
-γ<sub>mechanic_id; COUNT(*) → wo_count</sub>(Work_orders)
-(γ — групування / агрегація; у SQL: `GROUP BY mechanic_id`.)
+Менеджер сервісу хоче бачити завантаження кожного механіка, щоб збалансувати призначення.
+
+### Чого ви навчитеся
+
+- Оператор агрегації γ як `GROUP BY` + агрегатна функція.
+- Відсікати рядки, де ключ групування — `NULL` (механіка ще не призначено).
+
+### Задіяні таблиці
+
+| Таблиця | Колонки |
+|---|---|
+| `work_orders` | `assigned_mechanic_id` |
+
+### Завдання
+
+Для кожного механіка хоча б з одним призначеним замовленням підрахувати кількість.
+
+**Алгебра (розширена):** γ<sub>assigned_mechanic_id; COUNT(*) → wo_count</sub>(σ<sub>assigned_mechanic_id IS NOT NULL</sub>(Work_orders))
+
+### Очікуваний результат (реальні рядки з дампу — вибірка по перших 500 замовленнях)
+
+```text
++----------------------+----------+
+| assigned_mechanic_id | wo_count |
++----------------------+----------+
+|                    1 |        1 |
+|                    2 |        1 |
+|                    3 |        1 |
+|                    4 |        1 |
+|                    5 |        1 |
+|                    6 |        1 |
+|                    7 |        1 |
+|                    8 |        1 |
+|                    9 |        1 |
+|                   10 |        1 |
+| ...                  |          |
++----------------------+----------+
+```
+
+### Підказка
+
+Шаблон: `SELECT g, COUNT(*) AS c FROM t WHERE g IS NOT NULL GROUP BY g`.
+
+### Розв'язання
+
+```sql
+SELECT assigned_mechanic_id,
+       COUNT(*) AS wo_count
+FROM work_orders
+WHERE assigned_mechanic_id IS NOT NULL
+GROUP BY assigned_mechanic_id;
+```
+
+### Покрокове пояснення
+
+1. **`GROUP BY` склеює рядки** з однаковим `assigned_mechanic_id` в одну «корзину»; агрегат (`COUNT(*)`) підсумовує кожну корзину.
+2. **`WHERE` виконується *до* `GROUP BY`.** Тому фільтр `IS NOT NULL` — у `WHERE`, не в `HAVING`.
+3. **`ONLY_FULL_GROUP_BY` (за замовч. у MySQL 8+)** вимагає, щоб кожен не-агрегатний стовпець із `SELECT` був у `GROUP BY`. Забути про це — поширена помилка.
 
 ---
 
 ## Вправа 11 — Багато-до-багатьох через міст
 
-**Завдання:** перелічити **ім'я** типу робіт і **ціну** для кожної позиції на робочому замовленні `id = 1` (використайте `order_jobs` і `job_types`).
+### Контекст
 
-**Алгебра:**
-π<sub>jt.name, oj.price</sub>(
- σ<sub>oj.work_order_id = 1</sub>( ρ<sub>oj</sub>(Order_jobs) ⋈<sub>oj.job_type_id = jt.id</sub> ρ<sub>jt</sub>(Job_types) )
-)
+Друк сторінки деталей замовлення: на кожен рядок — назва типу роботи та її ціна.
+
+### Чого ви навчитеся
+
+- Класичний N:M шаблон: `order_jobs` — міст між `work_orders` та `job_types`.
+- Проєкція стовпців з обох сторін з'єднання.
+
+### Задіяні таблиці
+
+| Таблиця | Колонки |
+|---|---|
+| `order_jobs` | `id`, `work_order_id`, `job_type_id`, `price` |
+| `job_types` | `id`, `name`, `standard_hours` |
+
+### Завдання
+
+Показати назву типу робіт і ціну для кожної позиції замовлень 1–5.
+
+**Алгебра:** π<sub>jt.name, oj.price</sub>( σ<sub>oj.work_order_id BETWEEN 1 AND 5</sub>( ρ<sub>oj</sub>(Order_jobs) ⋈<sub>oj.job_type_id = jt.id</sub> ρ<sub>jt</sub>(Job_types) ) )
+
+### Очікуваний результат (реальні рядки з дампу)
+
+```text
++---------------+--------+---------------+
+| job_type_name | price  | work_order_id |
++---------------+--------+---------------+
+| JobType_0001  | 300.13 |             1 |
+| JobType_0002  | 300.25 |             2 |
+| JobType_0003  | 300.38 |             3 |
+| JobType_0004  | 300.50 |             4 |
+| JobType_0005  | 300.63 |             5 |
++---------------+--------+---------------+
+```
+
+### Підказка
+
+`INNER JOIN job_types AS jt ON oj.job_type_id = jt.id`; фільтр — на `oj.work_order_id`.
+
+### Розв'язання
+
+```sql
+SELECT jt.name AS job_type_name,
+       oj.price
+FROM order_jobs AS oj
+INNER JOIN job_types AS jt ON oj.job_type_id = jt.id
+WHERE oj.work_order_id BETWEEN 1 AND 5;
+```
+
+### Покрокове пояснення
+
+1. **Міст-таблиця — джерело.** `order_jobs` має обидва зовнішні ключі, тож саме вона стоїть зліва у `JOIN`.
+2. **σ фільтрує номер замовлення** (`BETWEEN 1 AND 5`); у підручниковій RA це після join, але оптимізатор зазвичай проштовхує фільтр униз до сканування таблиці.
+3. **Проєкція** бере по одному стовпцю з кожної сторони. У ширших варіантах варто було б проєктувати ще й `work_order_id`, щоб знати, до якого замовлення належить рядок.
 
 ---
 
-## Вправа 12 — Склад, з'єднаний зі складами та деталями
+## Вправа 12 — Inventory + warehouse + part
 
-**Завдання:** для рядків із `quantity < 5` показати ім'я складу, `sku` деталі та `quantity`.
+### Контекст
 
-**Алгебра:**
-π<sub>w.name, p.sku, inv.quantity</sub>(
- σ<sub>inv.quantity < 5</sub>( Inventory ⋈ Parts ⋈ Warehouses за ключами )
-)
-(З'єднайте `inventory.part_id = parts.id` і `inventory.warehouse_id = warehouses.id`.)
+Завідувач складу хоче короткий список **позицій з малим залишком** (менше п'яти на полиці) — і знати, на якому складі і за яким SKU не вистачає.
+
+### Чого ви навчитеся
+
+- Трикратне з'єднання з **двома** різними FK з однієї fact-подібної таблиці.
+- Використання аліасів, щоб запит лишався читабельним.
+
+### Задіяні таблиці
+
+| Таблиця | Колонки |
+|---|---|
+| `inventory` | `id`, `part_id`, `warehouse_id`, `quantity` |
+| `parts` | `id`, `sku` |
+| `warehouses` | `id`, `name` |
+
+### Завдання
+
+Показати `warehouse_name`, `sku`, `quantity` для записів з `quantity < 5`.
+
+**Алгебра:** π<sub>w.name, p.sku, inv.quantity</sub>( σ<sub>inv.quantity < 5</sub>( Inventory ⋈<sub>inv.part_id=p.id</sub> Parts ⋈<sub>inv.warehouse_id=w.id</sub> Warehouses ) )
+
+### Очікуваний результат (реальні рядки з дампу — перші 8 з 1 600)
+
+```text
++----------------+--------------+----------+
+| warehouse_name | sku          | quantity |
++----------------+--------------+----------+
+| Warehouse_001  | SKU-00000001 |        2 |
+| Warehouse_002  | SKU-00000002 |        3 |
+| Warehouse_003  | SKU-00000003 |        4 |
+| Warehouse_050  | SKU-00000250 |        1 |
+| Warehouse_051  | SKU-00000251 |        2 |
+| Warehouse_052  | SKU-00000252 |        3 |
+| Warehouse_053  | SKU-00000253 |        4 |
+| Warehouse_100  | SKU-00000500 |        1 |
+| ...            |              |          |
++----------------+--------------+----------+
+```
+
+### Підказка
+
+`inventory` — центр «зірки»; з'єднайте з `parts` та `warehouses`, потім фільтр на `quantity`.
+
+### Розв'язання
+
+```sql
+SELECT w.name AS warehouse_name,
+       p.sku,
+       inv.quantity
+FROM inventory AS inv
+INNER JOIN warehouses AS w ON inv.warehouse_id = w.id
+INNER JOIN parts AS p ON inv.part_id = p.id
+WHERE inv.quantity < 5;
+```
+
+### Покрокове пояснення
+
+1. **Два FK — два join-и.** `inventory` посилається і на `parts`, і на `warehouses`, тож треба по одному `JOIN` на кожну вимірну таблицю.
+2. **`WHERE quantity < 5`** для inner-join можна винести й в `ON`; ми лишаємо у `WHERE` — це фільтр рядка, не предикат з'єднання.
+3. **`quantity` належить `inv`** — інших `quantity` у запиті немає, тож аліас не обов'язковий, але писати його корисно як документацію.
 
 ---
 
-## Вправа 13 — Шаблон існування / напівз'єднання
+## Вправа 13 — Напівз'єднання (⋉)
 
-**Завдання:** клієнти, які мають принаймні одне записування на прийом зі статусом `confirmed` (вивести унікальні id та ім'я клієнта).
+### Контекст
 
-**Алгебра (стиль напівз'єднання):**
-π<sub>c.id, c.first_name, c.last_name</sub>(
- Customers ⋉ ( Vehicles ⋈ Appointments where appointments.status = 'confirmed' )
-)
-(«⋉» — напівз'єднання; у SQL це зазвичай `EXISTS` або `INNER JOIN` з `DISTINCT`.)
+Маркетинг хоче **список клієнтів**, що мають хоча б одне **підтверджене** записування — лише клієнтів, без дублікатів і без полів зустрічі.
+
+### Чого ви навчитеся
+
+- Напівз'єднання ⋉ залишає **лише ліву сторону**, спроєктовану та дедуплікатовану.
+- Дві еквівалентні SQL-форми: `INNER JOIN ... DISTINCT` та `EXISTS`.
+
+### Задіяні таблиці
+
+| Таблиця | Колонки |
+|---|---|
+| `customers` | `id`, `first_name`, `last_name` |
+| `vehicles` | `id`, `customer_id` |
+| `appointments` | `vehicle_id`, `status` |
+
+### Завдання
+
+Повернути унікальних клієнтів (id, ім'я, прізвище), у яких є хоча б одне записування зі `status = 'confirmed'`.
+
+**Алгебра:** π<sub>c.id, c.first_name, c.last_name</sub>( Customers ⋉ ( Vehicles ⋈ σ<sub>status = 'confirmed'</sub>(Appointments) ) )
+
+### Очікуваний результат (реальні рядки з дампу — перші 10)
+
+```text
++----+------------+------------+
+| id | first_name | last_name  |
++----+------------+------------+
+|  2 | Name_2     | Surname_2  |
+|  6 | Name_6     | Surname_6  |
+| 10 | Name_10    | Surname_10 |
+| 14 | Name_14    | Surname_14 |
+| 18 | Name_18    | Surname_18 |
+| 22 | Name_22    | Surname_22 |
+| 26 | Name_26    | Surname_26 |
+| 30 | Name_30    | Surname_30 |
+| 34 | Name_34    | Surname_34 |
+| 38 | Name_38    | Surname_38 |
+| ...|            |            |
++----+------------+------------+
+```
+
+### Підказка
+
+Два еквівалентні варіанти: `INNER JOIN + DISTINCT` або `EXISTS`. Обидва є у файлі-компаньйоні.
+
+### Розв'язання
+
+```sql
+-- Join + DISTINCT
+SELECT DISTINCT c.id,
+                c.first_name,
+                c.last_name
+FROM customers AS c
+INNER JOIN vehicles AS v ON v.customer_id = c.id
+INNER JOIN appointments AS a ON a.vehicle_id = v.id
+WHERE a.status = 'confirmed';
+
+-- EXISTS (чистіший варіант для «напівз'єднання»)
+SELECT c.id, c.first_name, c.last_name
+FROM customers AS c
+WHERE EXISTS (
+  SELECT 1
+  FROM vehicles AS v
+  INNER JOIN appointments AS a ON a.vehicle_id = v.id
+  WHERE v.customer_id = c.id
+    AND a.status = 'confirmed'
+);
+```
+
+### Покрокове пояснення
+
+1. **Напівз'єднання зберігає лише стовпці лівої таблиці.** Тому у `SELECT` немає полів `vehicles` чи `appointments`.
+2. **`INNER JOIN + DISTINCT` спрацює**, але матеріалізує всі збіги перед дедуплікацією; `EXISTS` короткозамикається на першому ж збігу.
+3. **σ на appointments** (`a.status = 'confirmed'`) проштовхується всередину правої сторони — нотація `Vehicles ⋈ σ(Appointments)` точно це відображає.
 
 ---
 
-## Вправа 14 — Декартів добуток (з невеликим обмеженням)
+## Вправа 14 — Декартів добуток (з обмеженням)
 
-**Завдання:** пари `(employee.id, role.id)` **лише там, де** `employees.role_id = roles.id` — тобто покажіть, що θ-з'єднання — це насправді σ( R × S ).
+### Контекст
 
-**Алгебра:**
-σ<sub>e.role_id = r.id</sub>( Employees × ρ<sub>r</sub>(Roles) )
+Навчальний приклад: показати, що θ-з'єднання — це σ(R × S). На реальних даних так робити не варто; тут — навмисне обмежений варіант.
+
+### Чого ви навчитеся
+
+- `CROSS JOIN` — SQL-форма ×.
+- Предикат `WHERE` поверх `CROSS JOIN` відтворює тета-join — корисно, щоб зрозуміти **навіщо** в SQL додали `JOIN` як окрему конструкцію.
+
+### Задіяні таблиці
+
+| Таблиця | Колонки |
+|---|---|
+| `employees` | `id`, `role_id` |
+| `roles` | `id` |
+
+### Завдання
+
+Повернути пари `(employees.id, roles.id)` з декартового добутку, **обмеженого** умовою `e.role_id = r.id`.
+
+**Алгебра:** σ<sub>e.role_id = r.id</sub>( Employees × ρ<sub>r</sub>(Roles) )
+
+### Очікуваний результат (реальні рядки з дампу — перші 10 зі 100 000)
+
+```text
++-------------+---------+
+| employee_id | role_id |
++-------------+---------+
+|           1 |       1 |
+|           2 |       2 |
+|           3 |       3 |
+|           4 |       4 |
+|           5 |       5 |
+|           6 |       6 |
+|           7 |       7 |
+|           8 |       8 |
+|           9 |       9 |
+|          10 |      10 |
+| ...         |         |
++-------------+---------+
+```
+
+### Підказка
+
+`CROSS JOIN` між таблицями, потім `WHERE` обирає лише ті рядки, де збігається ключ.
+
+### Розв'язання
+
+```sql
+SELECT e.id AS employee_id,
+       r.id AS role_id
+FROM employees AS e
+CROSS JOIN roles AS r
+WHERE e.role_id = r.id;
+```
+
+### Покрокове пояснення
+
+1. **× ↔ `CROSS JOIN`.** Без фільтра дав би |Employees| × |Roles| = 100 000 × 10 = 1 000 000 рядків.
+2. **σ зверху — це і є тета-join.** Оптимізатор насправді перепише цей запит у `INNER JOIN`, тож штрафу за продуктивність тут не буде.
+3. **Чому на практиці пишуть `INNER JOIN`.** Він документує намір («з'єднати два відношення») і важче неправильно прочитати, ніж окремий `WHERE`, який може непомітно стати «справжнім» декартовим добутком, якщо хтось видалить предикат.
 
 ---
 
-## Вправа 15 — Пари еквівалентів (само-з'єднання на `parts`)
+## Вправа 15 — Само-з'єднання через `equivalents`
 
-**Завдання:** з таблиці `equivalents` (`part_id_1`, `part_id_2`) перелічити SKU для обох сторін кожної пари.
+### Контекст
 
-**Алгебра:**
-π<sub>p1.sku, p2.sku</sub>(
- Equivalents ⋈<sub>part_id_1 = p1.id</sub> ρ<sub>p1</sub>(Parts) ⋈<sub>part_id_2 = p2.id</sub> ρ<sub>p2</sub>(Parts)
-)
+У каталозі є таблиця `equivalents`, що пов'язує взаємозамінні SKU (наприклад, OEM ↔ aftermarket). Щоб показати таку заміну, потрібні два SKU — але обидва живуть у тій самій таблиці `parts`.
+
+### Чого ви навчитеся
+
+- **Само-з'єднання** з двома різними аліасами на одну й ту саму фізичну таблицю.
+- Чому в чистій RA ρ концептуально обов'язкове: без перейменування неможливо говорити про «ліву» і «праву» запчастину окремо.
+
+### Задіяні таблиці
+
+| Таблиця | Колонки |
+|---|---|
+| `equivalents` | `id`, `part_id_1`, `part_id_2` |
+| `parts` | `id`, `sku` |
+
+### Завдання
+
+Для кожної пари в `equivalents` повернути два SKU.
+
+**Алгебра:** π<sub>p1.sku, p2.sku</sub>( Equivalents ⋈<sub>part_id_1 = p1.id</sub> ρ<sub>p1</sub>(Parts) ⋈<sub>part_id_2 = p2.id</sub> ρ<sub>p2</sub>(Parts) )
+
+### Очікуваний результат (реальні рядки з дампу — перші 8)
+
+```text
++--------------+--------------+
+| sku_1        | sku_2        |
++--------------+--------------+
+| SKU-00000001 | SKU-00000002 |
+| SKU-00000002 | SKU-00000003 |
+| SKU-00000003 | SKU-00000004 |
+| SKU-00000004 | SKU-00000005 |
+| SKU-00000005 | SKU-00000006 |
+| SKU-00000006 | SKU-00000007 |
+| SKU-00000007 | SKU-00000008 |
+| SKU-00000008 | SKU-00000009 |
+| ...          |              |
++--------------+--------------+
+```
+
+### Підказка
+
+З'єднайте `parts` двічі з різними аліасами (`p1`, `p2`); кожен аліас відповідає одній стороні пари.
+
+### Розв'язання
+
+```sql
+SELECT p1.sku AS sku_1,
+       p2.sku AS sku_2
+FROM equivalents AS e
+INNER JOIN parts AS p1 ON e.part_id_1 = p1.id
+INNER JOIN parts AS p2 ON e.part_id_2 = p2.id;
+```
+
+### Покрокове пояснення
+
+1. **Два аліаси, одна таблиця.** MySQL трактує `p1` і `p2` як два незалежні джерела рядків; без аліасів запит був би неоднозначний і його б відхилили.
+2. **Кожен `JOIN` розв'язує одну сторону** пари (`part_id_1`, потім `part_id_2`). Міст-таблиця `equivalents` — зліва.
+3. **Симетрія не гарантується** — якщо збережено `(A,B)`, але не `(B,A)`, запит покаже лише один напрям. Щоб отримати обидва, додайте `UNION` з оберненою проєкцією.
 
 ---
 
-### Як виконати SQL
+## Діагностика: моє відображення алгебри повернуло 0 рядків
 
-1. Завантажте дамп у MySQL, напр. `mysql ... < car_service_db.sql` після `gunzip`.
-2. `USE car_service_db;`
-3. Виконайте запити з `car_service_algebra_examples.sql`.
+| Симптом | Імовірне виправлення |
+|---|---|
+| Порожньо на σ<sub>total_cost > 1000</sub> | Перші тисячі рядків у дампі мають вартість нижче 1 000; підніміть верхню межу id або зменшіть поріг. |
+| `LEFT JOIN` повертає те саме, що `INNER` | У правому FK у вибірці немає `NULL`-ів — додайте `WHERE rhs.id IS NULL`, щоб побачити різницю. |
+| `NOT IN` з підзапитом нічого не повертає | Права частина містить `NULL`; перепишіть через `NOT EXISTS`. |
+| `INTERSECT` дає синтаксичну помилку | MySQL до 8.0.31: використовуйте шаблон `INNER JOIN ... DISTINCT`. |
+| Три-табличний join «вибухає» | Забули `ON`. Оптимізатор не попередить — просто склеїть декартів добуток. |
 
-Якщо запит повертає порожню множину на вашій машині, послабте предикати (наприклад, змініть пороги або зніміть фільтри) — **структура** відповідності алгебра ↔ SQL залишиться незмінною.
+Щоб запустити **усі** приклади одним проходом: `mysql -t -u root car_service_db < 03_mysql/01_relational_algebra_Koda/car_service_algebra_examples.sql`.

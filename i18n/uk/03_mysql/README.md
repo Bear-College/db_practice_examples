@@ -24,6 +24,10 @@
 | [`14_procedures/`](../../../03_mysql/14_procedures/) | Збережені процедури | [`procedures_car_service_db.md`](14_procedures/procedures_car_service_db.md) |
 | [`15_cycles/`](../../../03_mysql/15_cycles/) | Цикли та рекурсивні CTE | [`cycles_car_service_db.md`](15_cycles/cycles_car_service_db.md) |
 | [`16_orm/`](../../../03_mysql/16_orm/) | Уроки SQLAlchemy ORM | [`orm_sqlalchemy.md`](16_orm/orm_sqlalchemy.md) |
+| [`17_oltp_olap/`](../../../03_mysql/17_oltp_olap/) | OLTP vs OLAP | [`oltp_olap_car_service_db.md`](17_oltp_olap/oltp_olap_car_service_db.md) |
+| [`18_data_warehouse/`](../../../03_mysql/18_data_warehouse/) | Сховище даних (зіркова схема) | [`data_warehouse_car_service_db.md`](18_data_warehouse/data_warehouse_car_service_db.md) |
+| [`19_indexing/`](../../../03_mysql/19_indexing/) | Індексація в реляційних БД | [`indexing_car_service_db.md`](19_indexing/indexing_car_service_db.md) |
+| [`20_partitioning/`](../../../03_mysql/20_partitioning/) | Розбиття на частини (partitioning) | [`partitioning_car_service_db.md`](20_partitioning/partitioning_car_service_db.md) |
 
 ## Корисні файли
 

@@ -24,6 +24,10 @@ This folder contains SQL practice modules and an ORM module.
 | [`14_procedures/`](14_procedures/) | Stored procedures | [`procedures_car_service_db.md`](14_procedures/procedures_car_service_db.md) |
 | [`15_cycles/`](15_cycles/) | Loops and recursive CTEs | [`cycles_car_service_db.md`](15_cycles/cycles_car_service_db.md) |
 | [`16_orm/`](16_orm/) | SQLAlchemy ORM lessons | [`orm_sqlalchemy.md`](16_orm/orm_sqlalchemy.md) |
+| [`17_oltp_olap/`](17_oltp_olap/) | OLTP vs OLAP | [`oltp_olap_car_service_db.md`](17_oltp_olap/oltp_olap_car_service_db.md) |
+| [`18_data_warehouse/`](18_data_warehouse/) | Data warehouse (star schema) | [`data_warehouse_car_service_db.md`](18_data_warehouse/data_warehouse_car_service_db.md) |
+| [`19_indexing/`](19_indexing/) | Indexing in relational databases | [`indexing_car_service_db.md`](19_indexing/indexing_car_service_db.md) |
+| [`20_partitioning/`](20_partitioning/) | Table partitioning | [`partitioning_car_service_db.md`](20_partitioning/partitioning_car_service_db.md) |
 
 ## Useful files
 

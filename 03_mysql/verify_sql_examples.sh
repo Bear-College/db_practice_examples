@@ -60,6 +60,10 @@ run_file "Built-in functions (car_service_db)" "$ROOT/13_functions/car_service_f
 run_file "Triggers (car_service_db)" "$ROOT/12_triggers/car_service_triggers_examples.sql"
 run_file "Stored procedures (car_service_db)" "$ROOT/14_procedures/car_service_procedures_examples.sql"
 run_file "Cycles / loops (car_service_db)" "$ROOT/15_cycles/car_service_cycles_examples.sql"
+run_file "OLTP vs OLAP (car_service_db)" "$ROOT/17_oltp_olap/car_service_oltp_olap_examples.sql"
+run_file "Data warehouse (car_service_db)" "$ROOT/18_data_warehouse/car_service_data_warehouse_examples.sql"
+run_file "Indexing strategy (car_service_db)" "$ROOT/19_indexing/car_service_indexing_examples.sql"
+run_file "Partitioning (car_service_db)" "$ROOT/20_partitioning/car_service_partitioning_examples.sql"
 
 echo ""
 echo "All SQL files executed successfully."
